@@ -11,18 +11,16 @@ Dataset <- read.csv("data.csv")
 install.packages("ggplot2")
 library(ggplot2)
 install.packages("dplyr") 
-library(dplyr)  
- 
-
+library(dplyr) 
 ```
 
-# IT326 Project  
+# IT326 Project {style="color: gray"}
 
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
 ## The Goal
 
-Our primary objective of this analysis is to identify the main factors and reasons why students are less likely to pursue higher education indicated by "will_go_to_college" being 'False'. By leveraging the provided dataset with attributes such as (school type, school accreditation, gender, interest in college, and residence, we aim to discover the most influential variables and their relationships with the decision not to attend college.
+Our primary objective of this analysis is to identify the main factors and reasons why students are less likely to pursue higher education indicated by "will_go_to_college" being 'False'. By leveraging the provided dataset with attributes such as school type, school accreditation, gender, interest in college, residence, we aim to discover the most influential variables and their relationships with the decision not to attend college.
 
 ## The Source
 
@@ -36,37 +34,37 @@ Kaggle.com
 
 -   Number of attributes : 11
 -   Number of rows (objects) : 1000
--   The class label: The class label in our project is the attribute "will_go_to_college". This attribute is binary, meaning it can take on two values: True for yes or False for no. The value of this attribute will be the target variable we are trying to predict during our project.
+-   The class label: The class label in our project is the attribute "will_go_to_college". This attribute is binary, meaning that it can take on two values: True for yes or False for no. The value of this attribute will be the target variable that we are trying to predict during our project.
 
 ------------------------------------------------------------------------
 
-+-----------------------+------------------------------------------------------------+-------------+-------------------------------------+
-| Attribute             | Description                                                | Type        | Possible values                     |
-+-----------------------+------------------------------------------------------------+-------------+-------------------------------------+
-| type_school           | The type of school the student attends                     | Nominal     | Academic / Vocational               |
-+-----------------------+------------------------------------------------------------+-------------+-------------------------------------+
-| school_accreditation  | The quality if school                                      | Binary      | A / B (A is better than B)          |
-+-----------------------+------------------------------------------------------------+-------------+-------------------------------------+
-| gender                | The student's gender                                       | Nominal     | Male / Female                       |
-+-----------------------+------------------------------------------------------------+-------------+-------------------------------------+
-| interest              | The student's interest in going to colleege                | Nominal     | Very interested / Uncertain / Other |
-+-----------------------+------------------------------------------------------------+-------------+-------------------------------------+
-| residence             | The student's residence                                    | Nominal     | Urban / Rural                       |
-+-----------------------+------------------------------------------------------------+-------------+-------------------------------------+
-| parent_age            | The age of the student's parents                           | Numeric     | 40 - 65                             |
-+-----------------------+------------------------------------------------------------+-------------+-------------------------------------+
-| parent_salary         | The monthly salary of the student's parents in IDR/Rupiah. | Numeric     | 1000K - 10M                         |
-|                       |                                                            |             |                                     |
-|                       | [1Rupiah = 0.00024SAR]                                     |             |                                     |
-+-----------------------+------------------------------------------------------------+-------------+-------------------------------------+
-| house_area            | The size of the student's house in meter square            | Numeric     | 20 - 120                            |
-+-----------------------+------------------------------------------------------------+-------------+-------------------------------------+
-| average_grades        | The student's average grades in school.                    | Numeric     | 75 - 98                             |
-+-----------------------+------------------------------------------------------------+-------------+-------------------------------------+
-| parent_was_in_college | Whether the student's parents attended college.            | Binary      | True - False                        |
-+-----------------------+------------------------------------------------------------+-------------+-------------------------------------+
-| will_go_to_college    | Whether the student plans to go to college.                | Binary      | True - False                        |
-+-----------------------+------------------------------------------------------------+-------------+-------------------------------------+
++-----------------------+------------------------------------------------------------+------------+-------------------------------------+
+| Attribute             | Description                                                | Type       | Possible values                     |
++-----------------------+------------------------------------------------------------+------------+-------------------------------------+
+| type_school           | The type of school the student attends                     | Nominal    | Academic / Vocational               |
++-----------------------+------------------------------------------------------------+------------+-------------------------------------+
+| school_accreditation  | The quality if school                                      | Binary     | A / B (A is better than B)          |
++-----------------------+------------------------------------------------------------+------------+-------------------------------------+
+| gender                | The student's gender                                       | Nominal    | Male / Female                       |
++-----------------------+------------------------------------------------------------+------------+-------------------------------------+
+| interest              | The student's interest in going to colleege                | Nominal    | Very interested / Uncertain / Other |
++-----------------------+------------------------------------------------------------+------------+-------------------------------------+
+| residence             | The student's residence                                    | Nominal    | Urban / Rural                       |
++-----------------------+------------------------------------------------------------+------------+-------------------------------------+
+| parent_age            | The age of the student's parents                           | Numeric    | 40 - 65                             |
++-----------------------+------------------------------------------------------------+------------+-------------------------------------+
+| parent_salary         | The monthly salary of the student's parents in IDR/Rupiah. | Numeric    | 1000K - 10M                         |
+|                       |                                                            |            |                                     |
+|                       | [1Rupiah = 0.00024SAR]                                     |            |                                     |
++-----------------------+------------------------------------------------------------+------------+-------------------------------------+
+| house_area            | The size of the student's house in meter square            | Numeric    | 20 - 120                            |
++-----------------------+------------------------------------------------------------+------------+-------------------------------------+
+| average_grades        | The student's average grades in school.                    | Numeric    | 75 - 98                             |
++-----------------------+------------------------------------------------------------+------------+-------------------------------------+
+| parent_was_in_college | Whether the student's parents attended college.            | Binary     | True - False                        |
++-----------------------+------------------------------------------------------------+------------+-------------------------------------+
+| will_go_to_college    | Whether the student plans to go to college.                | Binary     | True - False                        |
++-----------------------+------------------------------------------------------------+------------+-------------------------------------+
 
 ## Sample from our data
 
@@ -74,7 +72,7 @@ Kaggle.com
 head(Dataset)
 ```
 
-Here is a sample of 6 rows from our dataset.
+Here is a sample of 6 row from our dataset.
 
 ## Missing values
 
@@ -82,7 +80,7 @@ Here is a sample of 6 rows from our dataset.
 sum(is.na(Dataset))
 ```
 
-There are no missing values in our dataset.
+There is no missing values in our dataset.
 
 ## Statistical graphs
 
@@ -128,7 +126,7 @@ ggplot(Dataset, aes(x = type_school, fill = will_go_to_college)) +
   labs(title = "Student's Type of School vs College Attendance",
        x = "Type of School",
        y = "Count") +
-  scale_fill_manual(values = c("True" = "antiquewhite2", "False" = "antiquewhite2")) +
+  scale_fill_manual(values = c("True" = "antiquewhite3", "False" = "antiquewhite2")) +
   theme_minimal()
 
  
@@ -140,20 +138,20 @@ This graph shows the impact of the type of high school attended by students on t
 
 -   among students from Vocational high schools, 187 are going to college, and 204 are not
 
-This information tells us that a higher proportion of students from academic high schools are going to college compared to those from vocational schools which suggests that the type of school attended.
+These information tell us that a higher proportion of students from academic high schools are going to college compared to those from vocational schools which suggest that the type of school attended.
 
 Graph 4:
 
 ```{r}
 ggplot(Dataset, aes(x = average_grades)) +
-  geom_histogram(binwidth = 5, fill = "antiquewhite3", color = "antiquewhite4") +
+  geom_histogram(binwidth = 5, fill = "antiquewhite2", color = "antiquewhite4") +
   labs(title = "Distribution of students' grades",
        x = "Students' average grades",
        y = "Frequency") +
   theme_minimal()
 ```
 
-This histogram shows us that the majority of the students in the dataset are performing well since it seems like the grades span between 75 and 98. This analysis will help us determine whether the academic performance level of students is a contributing factor to their college attendance or not.
+This histogram show us that the majority of the students in the dataset are performing well since it seems like their grades are spanning between 75 and 98. This analysis will help us determine whether the academic performance level of students is a contributing factor to their college attendance or not.
 
 ## Statistical Measures
 
@@ -164,7 +162,7 @@ summary(Dataset$average_grades)
 
 ```
 
-The student grades in our dataset range from 75.00 to 98.00, with a median of 85.58 and an average of 86.10. This suggests that most students are doing well as none of them have average grades below 50. However, it's interesting to note that some students have much higher or lower grades than the average, mainly due to the wide range of grades.
+The student grades in our dataset range from 75.00 to 98.00, with a median of 85.58 and an average of 86.10. This suggests that most students are doing well as none of them have average grades below 50. However, it's interesting to note that some students have much higher or lower grades than the average, mainly due to the wide range of grades..
 
 2.  The socioeconomic status of students' families analysis:
 
@@ -172,13 +170,13 @@ The student grades in our dataset range from 75.00 to 98.00, with a median of 85
 summary(Dataset$parent_salary)
 ```
 
-In the dataset, we've got students' parents with salaries ranging from 1,000,000 to 10,000,000 IDR/Rupiah. The median salary is 5,440,000 IDR/Rupiah, and the average is 5,381,570 IDR/Rupiah. This data tells us that many parents in our dataset earn less than the average salary in Indonesia, which is 146,000,000 IDR. This suggests that quite a few students in our dataset come from families with limited finances. And this financial situation could certainly impact their ability to get through college.
+In the dataset, we've got students parents with salaries ranging from 1,000,000 to 10,000,000 IDR/Rupiah. The median salary is 5,440,000 IDR/Rupiah, and the average is 5,381,570 IDR/Rupiah. This data tells us that many parents in our dataset earn less than the average salary in Indonesia, which is 146,000,000 IDR. This suggests that quite a few students in our dataset come from families with limited finances. And this financial situation could certainly impact their ability to get through college.
 
 ```{r}
 summary(Dataset$house_area)
 ```
 
-Additionally, we can utilize the house area attribute to gain a deeper understanding of the socioeconomic status of students' families, where students with houses significantly larger than the mean might indicate a higher socioeconomic status, while those with houses considerably smaller than the mean might reflect a comparatively lower socioeconomic status. Based on the shown output, the house areas range from [20.00-120.00 ㎡]. The median house area is 75.50 ㎡ indicating that families with house areas around this value likely have moderate socioeconomic status with houses that are neither very small nor very large.
+Additionally we can utilize the house area attribute to gain a deeper understanding of the socioeconomic status of students' families, where students with houses significantly larger than the mean might indicate a higher socioeconomic status, while those with houses considerably smaller than the mean might reflect a comparatively lower socioeconomic status. Based on the shown output, the house areas range from [20.00-120.00 ㎡]. The median house area is 75.50 ㎡ indicates that families with house areas around this value likely have moderate socioeconomic status with houses that neither very small nor very large.
 
 3.  Understanding Parent Age Range and Variation in its Values
 
@@ -190,11 +188,12 @@ cat("coefficient of variation:",SD/MeanAge*100,"%")
 
 ```
 
-This summary provides the range for age attribute [40,65] which indicates that all parent in middle age during this age parent have more concern about their children, the coefficient of variation= 6.7% which indicates lower variation,and the value of attribute parent_agerare are relatively close to the mean overall 25% of them have an age below or equal to 50, 75% have an age below or equal to 54 and the median value is 52
+This summary provides the range for age attribute [40,65] which indicates that all parent in middle age during this age parent have more concern about their children , the coefficient of variation= 6.7% which indicates lower variation ,and the value of attribute parent_agerare are relatively close to the mean overall 25% of them have an age below or equal to 50 , 75% have an age below or equal to 54 and the median value is 52
 
 ## Outliers analysis
 
 ```{r}
+###parent age outliers
 quartiles <- quantile(Dataset$parent_age, probs=c(.25, .75), na.rm = FALSE)
 IQR <- IQR(Dataset$parent_age)
 
@@ -204,6 +203,7 @@ Upper <- quartiles[2] + 1.5*IQR
 data_no_outlier <- subset(Dataset, Dataset$parent_age > Lower & Dataset$parent_age < Upper)
 dim(data_no_outlier)
 
+###parent salary outliers
 quartiles <- quantile(Dataset$parent_salary, probs=c(.25, .75), na.rm = FALSE)
 IQR <- IQR(Dataset$parent_salary)
 
@@ -213,6 +213,8 @@ Upper <- quartiles[2] + 1.5*IQR
 data_no_outlier <- subset(data_no_outlier, data_no_outlier$parent_salary> Lower & data_no_outlier$parent_salary < Upper)
 dim(data_no_outlier)
 
+
+###averge grades outliers
 quartiles <- quantile(Dataset$average_grades, probs=c(.25, .75), na.rm = FALSE)
 IQR <- IQR(Dataset$average_grades)
 
@@ -223,6 +225,7 @@ data_no_outlier <- subset(data_no_outlier, data_no_outlier$average_grades> Lower
 dim(data_no_outlier)
 
 
+###house area outliers
 quartiles <- quantile(Dataset$house_area, probs=c(.25, .75), na.rm = FALSE)
 IQR <- IQR(Dataset$house_area)
 
@@ -233,7 +236,7 @@ data_no_outlier <- subset(data_no_outlier, data_no_outlier$house_area> Lower & d
 dim(data_no_outlier)
 ```
 
-After conducting data analysis and identifying outliers, our inspection reveals that the detected outliers represent inherent variation within the population. Regarding Parent_age, outliers are observed for values below 44 and above 65. However, it should be noted that the minimum value is 40 and the maximum is 65, which falls within the normal range of outliers. For parent_salary, we found two outliers: one below 1,326,250 ind ≈ 85 USD and another above 9,416,250 ind ≈ 606 USD. The minimum and maximum values were determined to be 1,000,000 ind ≈ 64 USD and 10,000,000 ind ≈ 644 USD, respectively. In the case of grades, twelve outliers were identified, ranging from below 76 to above 97. Nevertheless, since the data falls within the acceptable range of 0 to 100, these outliers should be retained as they are still considered normal and within the usual grade range. Finally, for house_area, we found eleven outliers below 34.4m and above 115m, with the minimum being 20m and the maximum being 120m. However, these values are still considered typical for the population.
+After conducting data analysis and identifying outliers, our inspection reveals that the detected outliers represent inherent variation within the population. Regarding Parent_age, outliers are observed for values below 44 and above 65. However, it should be noted that the minimum value is 40 and the maximum is 65, which fall within the normal range of outliers. For parent_salary, we found two outliers: one below 1,326,250 ind ≈ 85 USD and another above 9,416,250 ind ≈ 606 USD. The minimum and maximum values were determined to be 1,000,000 ind ≈ 64 USD and 10,000,000 ind ≈ 644 USD, respectively. In the case of grades, twelve outliers were identified, ranging from below 76 to above 97. Nevertheless, since the data falls within the acceptable range of 0 to 100, these outliers should be retained as they are still considered normal and within the usual grade range. Finally, for house_area, we found eleven outliers below 34.4m and above 115m, with the minimum being 20m and the maximum being 120m. However, these values are still considered typical for the population.
 
 ## Feature selection
 
@@ -243,47 +246,25 @@ cor(Dataset[, unlist(lapply(Dataset, is.numeric))])
 
 After conducting a thorough analysis of the correlation, we determined that the correlation between the variables is significantly low. As a result, we reject the null hypothesis, indicating that the attributes are independent of each other.
 
-## Discretization
-
-```{r}
-Dataset$parent_age<-cut(Dataset$parent_age, seq(40,65,by=10),right = FALSE)
-```
-
-We transformed the parent_age attribute into intervals by dividing the values to fall on one of two possible interval labels with equal width which is(40,50],(50,60] by discretization the values will be simpler to classify or perform other methods that can help us later in our model.
-
-## Encoding to be corrected
-
-```{r}
-Dataset$parent_was_in_college[Dataset$parent_was_in_college=="TRUE"]<-1
-Dataset$parent_was_in_college[Dataset$parent_was_in_college=="FALSE"]<-0
-
-Dataset$will_go_to_college[Dataset$will_go_to_college=="TRUE"]<-0
-Dataset$will_go_to_college[Dataset$will_go_to_college=="FALSE"]<-1
-
-Dataset$gender[Dataset$gender=="Female"]<-1
-Dataset$gender[Dataset$gender=="Male"]<-0
-
-Dataset$school_accreditation[Dataset$school_accreditation=="A"]<-1
-Dataset$school_accreditation[Dataset$school_accreditation=="B"]<-0
-
-Dataset$interest[Dataset$interest=="Very Interested"]<-2
-Dataset$interest[Dataset$interest=="Less Interested"]<-1
-Dataset$interest[Dataset$interest=="Uncertain"]<-0
-
-
-Dataset$type_school[Dataset$type_school=="Academic"]<-1
-Dataset$type_school[Dataset$type_school=="Vocational"]<-0
-
-Dataset$residence[Dataset$residence=="Urban"]<-1
-Dataset$residence[Dataset$residence=="Rural"]<-0
-
-```
-
-Since encoding is an important step in data preprocessing that enables the use of categorical data in various data analysis and machine learning tasks, we encoded attributes like the 'parent was in college' attribute from (True, False) to (1, 0), and 'will go to college' from (True, False) to (0, 1). This encoding is carried out as we aim to predict the influencing factors. Additionally, we encoded the 'gender' attribute from (Female, Male) to (1, 0), 'school accreditation' from (A, B) to (1, 0), 'type_school' from (Academic, Vocational) to (1, 0), 'residence' from (Urban, Rural) to (1, 0), and 'interest' from (Very Interested, Less Interested, Uncertain) to (2, 1, 0) respectively. Encoding serves to simplify the data, reduce complexity, and enhance its suitability for modeling purposes.
-
 ## Normalization
 
 ```{r}
+normalize <- function(x) {return((x-min(x))/ (max(x)-min(x)))}
+datasetWithoutNormalization<-Dataset
+Dataset$parent_salary<-normalize(datasetWithoutNormalization$parent_salary)
+Dataset$house_area<-normalize(datasetWithoutNormalization$house_area)
+```
+
+We applied normalization to the 'parent_salary' and 'house_area' attributes, scaling their values to a range between 0 and 1. This normalization process greatly facilitates data handling and analysis, ensuring that these attributes are on a consistent scale. Which will improve the reliability of our data analysis and enable better conclusions to be drawn from the dataset. Normalization is a crucial step in preparing the data for modeling, as it prevents attributes with larger numerical ranges from dominating the analysis and ensures fair treatment for all features.
+
+
+
+## Discretization
+
+```{r}
+breaks<-c(40,50,60,70)
+Dataset$parent_age=cut(Dataset$parent_age,breaks = breaks)
+
 Dataset$average_grades [Dataset$average_grades >= 95] <- '+A'
 Dataset$average_grades [95 >Dataset$average_grades & Dataset$average_grades >= 90] <- 'A'
 Dataset$average_grades [90 >Dataset$average_grades & Dataset$average_grades >= 85] <- '+B'
@@ -297,15 +278,41 @@ Dataset$average_grades <- as.character(Dataset$average_grades )
 print(Dataset)
 ```
 
-We applied normalization to the 'parent_salary' and 'house_area' attributes, scaling their values to a range between 0 and 1. This normalization process greatly facilitates data handling and analysis, ensuring that these attributes are on a consistent scale. Which will improve the reliability of our data analysis and enable better conclusions to be drawn from the dataset. Normalization is a crucial step in preparing the data for modeling, as it prevents attributes with larger numerical ranges from dominating the analysis and ensures fair treatment for all features.
+We transformed the parent_age attribute into intervals by dividing the values to be fall on one of two possible interval labels with equal width which is(40,50],(50,60] by discretization the values well be simpler to classify or perform other methods that can help us later in our model.
 
+and to better utilize and interpret the grades attributes for each student, we have converted the numeric grades into letter grades (A+, A, B+, B, C+, C, D+, D, F). This transformation was undertaken to focus on the general letter grade representation rather than the precise numerical values.
 
+## Encoding
 ```{r}
-normalize <- function(x) {return((x-min(x))/ (max(x)-min(x)))}
-DatasetWithoutNormalization <- Dataset
-print(DatasetWithoutNormalization)
-Dataset$parent_salary<-normalize(DatasetWithoutNormalization$parent_salary)
-print(Dataset)
+Dataset$parent_was_in_college[Dataset$parent_was_in_college=="TRUE"]<-1
+Dataset$parent_was_in_college[Dataset$parent_was_in_college=="True"]<-1
+Dataset$parent_was_in_college[Dataset$parent_was_in_college=="FALSE"]<-0
+Dataset$parent_was_in_college[Dataset$parent_was_in_college=="False"]<-0
+
+Dataset$will_go_to_college[Dataset$will_go_to_college=="TRUE"]<-0
+Dataset$will_go_to_college[Dataset$will_go_to_college=="True"]<-0
+Dataset$will_go_to_college[Dataset$will_go_to_college=="FALSE"]<-1
+Dataset$will_go_to_college[Dataset$will_go_to_college=="False"]<-1
+
+Dataset$gender[Dataset$gender=="Female"]<-1
+Dataset$gender[Dataset$gender=="Male"]<-0
+
+Dataset$school_accreditation[Dataset$school_accreditation=="A"]<-1
+Dataset$school_accreditation[Dataset$school_accreditation=="B"]<-0
+
+Dataset$interest[Dataset$interest=="Very Interested"]<-4
+Dataset$interest[Dataset$interest=="Interested"]<-3
+Dataset$interest[Dataset$interest=="Less Interested"]<-2
+Dataset$interest[Dataset$interest=="Not Interested"]<-1
+Dataset$interest[Dataset$interest=="Uncertain"]<-0
+
+
+Dataset$type_school[Dataset$type_school=="Academic"]<-1 
+Dataset$type_school[Dataset$type_school=="Vocational"]<-0
+
+Dataset$residence[Dataset$residence=="Urban"]<-1
+Dataset$residence[Dataset$residence=="Rural"]<-0
+
 ```
 
-We also normalized the attribute parent_salary and house_area to take values between 0 and 1. Which will also improve the reliability of our data analysis.
+Since encoding is an important step in data preprocessing that enables the use of categorical data in various data analysis and machine learning tasks, we encoded attributes like the 'parent was in college' attribute from (True, False) to (1, 0), and 'will go to college' from (True, False) to (0, 1). This encoding is carried out as we aim to predict the influencing factors. Additionally, we encoded the 'gender' attribute from (Female, Male) to (1, 0), 'school accreditation' from (A, B) to (1, 0), 'type_school' from (Academic, Vocational) to (1, 0), 'residence' from (Urban, Rural) to (1, 0), and 'interest' from (Very Interested, Less Interested, Uncertain) to (2, 1, 0) respectively. Encoding serves to simplify the data, reduce complexity, and enhance its suitability for modeling purposes.
