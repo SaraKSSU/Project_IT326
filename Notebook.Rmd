@@ -16,13 +16,13 @@ library(dplyr)
 
 ```
 
-# IT326 Project {style="color: gray"}
+# IT326 Project  
 
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
 ## The Goal
 
-Our primary objective of this analysis is to identify the main factors and reasons why students are less likely to pursue higher education indicated by "will_go_to_college" being 'False'. By leveraging the provided dataset with attributes such as school type, school accreditation, gender, interest in college, residence, we aim to discover the most influential variables and their relationships with the decision not to attend college.
+Our primary objective of this analysis is to identify the main factors and reasons why students are less likely to pursue higher education indicated by "will_go_to_college" being 'False'. By leveraging the provided dataset with attributes such as (school type, school accreditation, gender, interest in college, and residence, we aim to discover the most influential variables and their relationships with the decision not to attend college.
 
 ## The Source
 
@@ -36,7 +36,7 @@ Kaggle.com
 
 -   Number of attributes : 11
 -   Number of rows (objects) : 1000
--   The class label: The class label in our project is the attribute "will_go_to_college". This attribute is binary, meaning that it can take on two values: True for yes or False for no. The value of this attribute will be the target variable that we are trying to predict during our project.
+-   The class label: The class label in our project is the attribute "will_go_to_college". This attribute is binary, meaning it can take on two values: True for yes or False for no. The value of this attribute will be the target variable we are trying to predict during our project.
 
 ------------------------------------------------------------------------
 
@@ -74,7 +74,7 @@ Kaggle.com
 head(Dataset)
 ```
 
-Here is a sample of 6 row from our dataset.
+Here is a sample of 6 rows from our dataset.
 
 ## Missing values
 
@@ -82,7 +82,7 @@ Here is a sample of 6 row from our dataset.
 sum(is.na(Dataset))
 ```
 
-There is no missing values in our dataset.
+There are no missing values in our dataset.
 
 ## Statistical graphs
 
@@ -140,7 +140,7 @@ This graph shows the impact of the type of high school attended by students on t
 
 -   among students from Vocational high schools, 187 are going to college, and 204 are not
 
-These information tell us that a higher proportion of students from academic high schools are going to college compared to those from vocational schools which suggest that the type of school attended.
+This information tells us that a higher proportion of students from academic high schools are going to college compared to those from vocational schools which suggests that the type of school attended.
 
 Graph 4:
 
@@ -153,7 +153,7 @@ ggplot(Dataset, aes(x = average_grades)) +
   theme_minimal()
 ```
 
-This histogram show us that the majority of the students in the dataset are performing well since it seems like the grades are spanning between 75 and 98. This analysis will help us determine whether the academic performance level of students is a contributing factor to their college attendance or not.
+This histogram shows us that the majority of the students in the dataset are performing well since it seems like the grades span between 75 and 98. This analysis will help us determine whether the academic performance level of students is a contributing factor to their college attendance or not.
 
 ## Statistical Measures
 
@@ -164,7 +164,7 @@ summary(Dataset$average_grades)
 
 ```
 
-The student grades in our dataset range from 75.00 to 98.00, with a median of 85.58 and an average of 86.10. This suggests that most students are doing well as none of them have average grades below 50. However, it's interesting to note that some students have much higher or lower grades than the average, mainly due to the wide range of grades..
+The student grades in our dataset range from 75.00 to 98.00, with a median of 85.58 and an average of 86.10. This suggests that most students are doing well as none of them have average grades below 50. However, it's interesting to note that some students have much higher or lower grades than the average, mainly due to the wide range of grades.
 
 2.  The socioeconomic status of students' families analysis:
 
@@ -172,13 +172,13 @@ The student grades in our dataset range from 75.00 to 98.00, with a median of 85
 summary(Dataset$parent_salary)
 ```
 
-In the dataset, we've got students parents with salaries ranging from 1,000,000 to 10,000,000 IDR/Rupiah. The median salary is 5,440,000 IDR/Rupiah, and the average is 5,381,570 IDR/Rupiah. This data tells us that many parents in our dataset earn less than the average salary in Indonesia, which is 146,000,000 IDR. This suggests that quite a few students in our dataset come from families with limited finances. And this financial situation could certainly impact their ability to get through college.
+In the dataset, we've got students' parents with salaries ranging from 1,000,000 to 10,000,000 IDR/Rupiah. The median salary is 5,440,000 IDR/Rupiah, and the average is 5,381,570 IDR/Rupiah. This data tells us that many parents in our dataset earn less than the average salary in Indonesia, which is 146,000,000 IDR. This suggests that quite a few students in our dataset come from families with limited finances. And this financial situation could certainly impact their ability to get through college.
 
 ```{r}
 summary(Dataset$house_area)
 ```
 
-Additionally we can utilize the house area attribute to gain a deeper understanding of the socioeconomic status of students' families, where students with houses significantly larger than the mean might indicate a higher socioeconomic status, while those with houses considerably smaller than the mean might reflect a comparatively lower socioeconomic status. Based on the shown output, the house areas range from [20.00-120.00 ㎡]. The median house area is 75.50 ㎡ indicates that families with house areas around this value likely have moderate socioeconomic status with houses that neither very small nor very large.
+Additionally, we can utilize the house area attribute to gain a deeper understanding of the socioeconomic status of students' families, where students with houses significantly larger than the mean might indicate a higher socioeconomic status, while those with houses considerably smaller than the mean might reflect a comparatively lower socioeconomic status. Based on the shown output, the house areas range from [20.00-120.00 ㎡]. The median house area is 75.50 ㎡ indicating that families with house areas around this value likely have moderate socioeconomic status with houses that are neither very small nor very large.
 
 3.  Understanding Parent Age Range and Variation in its Values
 
@@ -190,7 +190,7 @@ cat("coefficient of variation:",SD/MeanAge*100,"%")
 
 ```
 
-This summary provides the range for age attribute [40,65] which indicates that all parent in middle age during this age parent have more concern about their children , the coefficient of variation= 6.7% which indicates lower variation ,and the value of attribute parent_agerare are relatively close to the mean overall 25% of them have an age below or equal to 50 , 75% have an age below or equal to 54 and the median value is 52
+This summary provides the range for age attribute [40,65] which indicates that all parent in middle age during this age parent have more concern about their children, the coefficient of variation= 6.7% which indicates lower variation,and the value of attribute parent_agerare are relatively close to the mean overall 25% of them have an age below or equal to 50, 75% have an age below or equal to 54 and the median value is 52
 
 ## Outliers analysis
 
@@ -233,7 +233,7 @@ data_no_outlier <- subset(data_no_outlier, data_no_outlier$house_area> Lower & d
 dim(data_no_outlier)
 ```
 
-After conducting data analysis and identifying outliers, our inspection reveals that the detected outliers represent inherent variation within the population. Regarding Parent_age, outliers are observed for values below 44 and above 65. However, it should be noted that the minimum value is 40 and the maximum is 65, which fall within the normal range of outliers. For parent_salary, we found two outliers: one below 1,326,250 ind ≈ 85 USD and another above 9,416,250 ind ≈ 606 USD. The minimum and maximum values were determined to be 1,000,000 ind ≈ 64 USD and 10,000,000 ind ≈ 644 USD, respectively. In the case of grades, twelve outliers were identified, ranging from below 76 to above 97. Nevertheless, since the data falls within the acceptable range of 0 to 100, these outliers should be retained as they are still considered normal and within the usual grade range. Finally, for house_area, we found eleven outliers below 34.4m and above 115m, with the minimum being 20m and the maximum being 120m. However, these values are still considered typical for the population.
+After conducting data analysis and identifying outliers, our inspection reveals that the detected outliers represent inherent variation within the population. Regarding Parent_age, outliers are observed for values below 44 and above 65. However, it should be noted that the minimum value is 40 and the maximum is 65, which falls within the normal range of outliers. For parent_salary, we found two outliers: one below 1,326,250 ind ≈ 85 USD and another above 9,416,250 ind ≈ 606 USD. The minimum and maximum values were determined to be 1,000,000 ind ≈ 64 USD and 10,000,000 ind ≈ 644 USD, respectively. In the case of grades, twelve outliers were identified, ranging from below 76 to above 97. Nevertheless, since the data falls within the acceptable range of 0 to 100, these outliers should be retained as they are still considered normal and within the usual grade range. Finally, for house_area, we found eleven outliers below 34.4m and above 115m, with the minimum being 20m and the maximum being 120m. However, these values are still considered typical for the population.
 
 ## Feature selection
 
@@ -243,25 +243,13 @@ cor(Dataset[, unlist(lapply(Dataset, is.numeric))])
 
 After conducting a thorough analysis of the correlation, we determined that the correlation between the variables is significantly low. As a result, we reject the null hypothesis, indicating that the attributes are independent of each other.
 
-## Normalization
-
-```{r}
-normalize <- function(x) {return((x-min(x))/ (max(x)-min(x)))}
-DatasetWithoutNormalization <- Dataset
-print(DatasetWithoutNormalization)
-Dataset$parent_salary<-normalize(DatasetWithoutNormalization$parent_salary)
-print(Dataset)
-```
-
-We normalized the attribute parent_salary and house_area to take values between 0 and 1 that will facilities and helps a lot in handling the data to extracting more reliable conclusions
-
 ## Discretization
 
 ```{r}
 Dataset$parent_age<-cut(Dataset$parent_age, seq(40,65,by=10),right = FALSE)
 ```
 
-We transformed the parent_age attribute into intervals by dividing the values to be fall on one of two possible interval labels with equal width which is(40,50],(50,60] by discretization the values well be simpler to classify or perform other methods that can help us later in our model.
+We transformed the parent_age attribute into intervals by dividing the values to fall on one of two possible interval labels with equal width which is(40,50],(50,60] by discretization the values will be simpler to classify or perform other methods that can help us later in our model.
 
 ## Encoding to be corrected
 
@@ -312,3 +300,12 @@ print(Dataset)
 We applied normalization to the 'parent_salary' and 'house_area' attributes, scaling their values to a range between 0 and 1. This normalization process greatly facilitates data handling and analysis, ensuring that these attributes are on a consistent scale. Which will improve the reliability of our data analysis and enable better conclusions to be drawn from the dataset. Normalization is a crucial step in preparing the data for modeling, as it prevents attributes with larger numerical ranges from dominating the analysis and ensures fair treatment for all features.
 
 
+```{r}
+normalize <- function(x) {return((x-min(x))/ (max(x)-min(x)))}
+DatasetWithoutNormalization <- Dataset
+print(DatasetWithoutNormalization)
+Dataset$parent_salary<-normalize(DatasetWithoutNormalization$parent_salary)
+print(Dataset)
+```
+
+We also normalized the attribute parent_salary and house_area to take values between 0 and 1. Which will also improve the reliability of our data analysis.
