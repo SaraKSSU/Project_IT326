@@ -244,6 +244,24 @@ After conducting data analysis and identifying outliers, our inspection reveals 
 cor(Dataset[, unlist(lapply(Dataset, is.numeric))])
 ```
 
+```{r}
+if(!require(caret)){
+install.packages("caret")}
+library(caret)
+
+
+X <- dataset[, c("gender","type_school","school_accreditation","interest","residence","average_grades","parent_age","parent_salary","parent_was_in_college","house_area")]
+y <- dataset$will_go_to_college
+
+CV_folds <- 10
+train_control <- trainControl(method = "cv", number = CV_folds)
+
+method <- "glm"
+model <- train(X, y, method = method, trControl = train_control, metric = "AUC")
+selected_features <- varImp (model)
+print(selected_features)
+```
+
 After conducting a thorough analysis of the correlation, we determined that the correlation between the variables is significantly low. As a result, we reject the null hypothesis, indicating that the attributes are independent of each other.
 
 ## Normalization
@@ -256,8 +274,6 @@ Dataset$house_area<-normalize(datasetWithoutNormalization$house_area)
 ```
 
 We applied normalization to the 'parent_salary' and 'house_area' attributes, scaling their values to a range between 0 and 1. This normalization process greatly facilitates data handling and analysis, ensuring that these attributes are on a consistent scale. Which will improve the reliability of our data analysis and enable better conclusions to be drawn from the dataset. Normalization is a crucial step in preparing the data for modeling, as it prevents attributes with larger numerical ranges from dominating the analysis and ensures fair treatment for all features.
-
-
 
 ## Discretization
 
@@ -283,6 +299,7 @@ We transformed the parent_age attribute into intervals by dividing the values to
 and to better utilize and interpret the grades attributes for each student, we have converted the numeric grades into letter grades (A+, A, B+, B, C+, C, D+, D, F). This transformation was undertaken to focus on the general letter grade representation rather than the precise numerical values.
 
 ## Encoding
+
 ```{r}
 Dataset$parent_was_in_college[Dataset$parent_was_in_college=="TRUE"]<-1
 Dataset$parent_was_in_college[Dataset$parent_was_in_college=="True"]<-1
