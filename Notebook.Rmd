@@ -236,7 +236,9 @@ data_no_outlier <- subset(data_no_outlier, data_no_outlier$house_area> Lower & d
 dim(data_no_outlier)
 ```
 
-After conducting data analysis and identifying outliers, our inspection reveals that the detected outliers represent inherent variation within the population. Regarding Parent_age, outliers are observed for values below 44 and above 65. However, it should be noted that the minimum value is 40 and the maximum is 65, which fall within the normal range of outliers. For parent_salary, we found two outliers: one below 1,326,250 ind ≈ 85 USD and another above 9,416,250 ind ≈ 606 USD. The minimum and maximum values were determined to be 1,000,000 ind ≈ 64 USD and 10,000,000 ind ≈ 644 USD, respectively. In the case of grades, twelve outliers were identified, ranging from below 76 to above 97. Nevertheless, since the data falls within the acceptable range of 0 to 100, these outliers should be retained as they are still considered normal and within the usual grade range. Finally, for house_area, we found eleven outliers below 34.4m and above 115m, with the minimum being 20m and the maximum being 120m. However, these values are still considered typical for the population. \## Correlatiin analysis Chi square test for nominal attribute:
+After conducting data analysis and identifying outliers, our inspection reveals that the detected outliers represent inherent variation within the population. Regarding Parent_age, outliers are observed for values below 44 and above 65. However, it should be noted that the minimum value is 40 and the maximum is 65, which fall within the normal range of outliers. For parent_salary, we found two outliers: one below 1,326,250 ind ≈ 85 USD and another above 9,416,250 ind ≈ 606 USD. The minimum and maximum values were determined to be 1,000,000 ind ≈ 64 USD and 10,000,000 ind ≈ 644 USD, respectively. In the case of grades, twelve outliers were identified, ranging from below 76 to above 97. Nevertheless, since the data falls within the acceptable range of 0 to 100, these outliers should be retained as they are still considered normal and within the usual grade range. Finally, for house_area, we found eleven outliers below 34.4m and above 115m, with the minimum being 20m and the maximum being 120m. However, these values are still considered typical for the population. 
+## Correaltion analysis 
+Chi square test for nominal attribute:
 
 ```{r}
 #1
@@ -254,7 +256,7 @@ C=chisq.test(Dataset$school_accreditation , Dataset$will_go_to_college)
 print(C)
 ```
 
-All the attributes has X-square greater than the p-valuse, therfore we will reject the null hypothesis except for the residence that has chi-square smaller than the p-value.
+All the attributes have X-square greater than the p-value, therefore we will reject the null hypothesis except for the residence that has an X-square smaller than the p-value.
 
 ## Feature selection
 
