@@ -9,7 +9,7 @@ Our main motivation is to define the primary factors that prevent students from 
 |-----------------|------------|
 | Sara Alghemlas  | 443200616  |
 | Razan Aldakhil  | 443201096  |
-| Mariam Alosaimi |            |
+| Mariam Alosaimi | 443201036  |        
 | Lamya Aljaitjin | 442201857  |
 
  
