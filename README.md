@@ -13,5 +13,3 @@ Our main motivation is to define the primary factors that prevent students from 
 | Mariam Alosaimi |            |
 | Lamya Aljaitjin | 442201857  |
 
-\
-\
