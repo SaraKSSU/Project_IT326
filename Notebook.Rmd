@@ -243,15 +243,10 @@ After conducting data analysis and identifying outliers, our inspection reveals 
 ```{r}
 cor(Dataset[, unlist(lapply(Dataset, is.numeric))])
 ```
-
+After conducting a thorough analysis of the correlation, we determined that the correlation between the variables is significantly low. As a result, we reject the null hypothesis, indicating that the attributes are independent of each other.
 ```{r}
-if(!require(caret)){
-install.packages("caret")}
-library(caret)
-
-
-X <- dataset[, c("gender","type_school","school_accreditation","interest","residence","average_grades","parent_age","parent_salary","parent_was_in_college","house_area")]
-y <- dataset$will_go_to_college
+X <- Dataset[, c("gender","type_school","school_accreditation","interest","residence","average_grades","parent_age","parent_salary","parent_was_in_college","house_area")]
+y <- Dataset$will_go_to_college
 
 CV_folds <- 10
 train_control <- trainControl(method = "cv", number = CV_folds)
@@ -260,10 +255,10 @@ method <- "glm"
 model <- train(X, y, method = method, trControl = train_control, metric = "AUC")
 selected_features <- varImp (model)
 print(selected_features)
+
+
 ```
-
-After conducting a thorough analysis of the correlation, we determined that the correlation between the variables is significantly low. As a result, we reject the null hypothesis, indicating that the attributes are independent of each other.
-
+To determine the relative importance of columns with respect to the class label, we employed a code that ranks the columns. The ranking is based on their significance in predicting the class label, with the most important columns listed first and the least important columns listed last. This approach allows us to prioritize the columns that have a stronger influence on the class label and aids us in focusing our analysis on the most relevant features.
 ## Normalization
 
 ```{r}
