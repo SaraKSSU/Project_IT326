@@ -66,13 +66,13 @@ Kaggle.com
 | will_go_to_college    | Whether the student plans to go to college.                | Binary     | True - False                        |
 +-----------------------+------------------------------------------------------------+------------+-------------------------------------+
 
-## Sample from our data
+## Sample of our data
 
 ```{r}
 head(Dataset)
 ```
 
-Here is a sample of 6 row from our dataset.
+Here are a sample of 6 row from our dataset.
 
 ## Missing values
 
@@ -80,7 +80,7 @@ Here is a sample of 6 row from our dataset.
 sum(is.na(Dataset))
 ```
 
-There is no missing values in our dataset.
+There are no missing values in our dataset.
 
 ## Statistical graphs
 
