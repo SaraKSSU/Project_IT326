@@ -38,33 +38,33 @@ Kaggle.com
 
 ------------------------------------------------------------------------
 
-+-----------------------+------------------------------------------------------------+------------+-------------------------------------+
-| Attribute             | Description                                                | Type       | Possible values                     |
-+-----------------------+------------------------------------------------------------+------------+-------------------------------------+
-| type_school           | The type of school the student attends                     | Nominal    | Academic / Vocational               |
-+-----------------------+------------------------------------------------------------+------------+-------------------------------------+
-| school_accreditation  | The quality if school                                      | Binary     | A / B (A is better than B)          |
-+-----------------------+------------------------------------------------------------+------------+-------------------------------------+
-| gender                | The student's gender                                       | Nominal    | Male / Female                       |
-+-----------------------+------------------------------------------------------------+------------+-------------------------------------+
-| interest              | The student's interest in going to colleege                | Nominal    | Very interested / Uncertain / Other |
-+-----------------------+------------------------------------------------------------+------------+-------------------------------------+
-| residence             | The student's residence                                    | Nominal    | Urban / Rural                       |
-+-----------------------+------------------------------------------------------------+------------+-------------------------------------+
-| parent_age            | The age of the student's parents                           | Numeric    | 40 - 65                             |
-+-----------------------+------------------------------------------------------------+------------+-------------------------------------+
-| parent_salary         | The monthly salary of the student's parents in IDR/Rupiah. | Numeric    | 1000K - 10M                         |
-|                       |                                                            |            |                                     |
-|                       | [1Rupiah = 0.00024SAR]                                     |            |                                     |
-+-----------------------+------------------------------------------------------------+------------+-------------------------------------+
-| house_area            | The size of the student's house in meter square            | Numeric    | 20 - 120                            |
-+-----------------------+------------------------------------------------------------+------------+-------------------------------------+
-| average_grades        | The student's average grades in school.                    | Numeric    | 75 - 98                             |
-+-----------------------+------------------------------------------------------------+------------+-------------------------------------+
-| parent_was_in_college | Whether the student's parents attended college.            | Binary     | True - False                        |
-+-----------------------+------------------------------------------------------------+------------+-------------------------------------+
-| will_go_to_college    | Whether the student plans to go to college.                | Binary     | True - False                        |
-+-----------------------+------------------------------------------------------------+------------+-------------------------------------+
++-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
+| Attribute             | Description                                                | Type       | Possible values                                                            |
++-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
+| type_school           | The type of school the student attends                     | Binary     | Academic / Vocational                                                      |
++-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
+| school_accreditation  | The quality if school                                      | Binary     | A / B (A is better than B)                                                 |
++-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
+| gender                | The student's gender                                       | Binary     | Male / Female                                                              |
++-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
+| interest              | The student's interest in going to colleege                | Nominal    | Very interested /Interested / Less Interested / Not Interested /Uncertain  |
++-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
+| residence             | The student's residence                                    | Binary     | Urban / Rural                                                              |
++-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
+| parent_age            | The age of the student's parents                           | Numeric    | 40 - 65                                                                    |
++-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
+| parent_salary         | The monthly salary of the student's parents in IDR/Rupiah. | Numeric    | 1000K - 10M                                                                |
+|                       |                                                            |            |                                                                            |
+|                       | [1Rupiah = 0.00024SAR]                                     |            |                                                                            |
++-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
+| house_area            | The size of the student's house in meter square            | Numeric    | 20 - 120                                                                   |
++-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
+| average_grades        | The student's average grades in school.                    | Numeric    | 75 - 98                                                                    |
++-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
+| parent_was_in_college | Whether the student's parents attended college.            | Binary     | True - False                                                               |
++-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
+| will_go_to_college    | Whether the student plans to go to college.                | Binary     | True - False                                                               |
++-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
 
 ## Sample of our data
 
@@ -236,9 +236,7 @@ data_no_outlier <- subset(data_no_outlier, data_no_outlier$house_area> Lower & d
 dim(data_no_outlier)
 ```
 
-After conducting data analysis and identifying outliers, our inspection reveals that the detected outliers represent inherent variation within the population. Regarding Parent_age, outliers are observed for values below 44 and above 65. However, it should be noted that the minimum value is 40 and the maximum is 65, which fall within the normal range of outliers. For parent_salary, we found two outliers: one below 1,326,250 ind ≈ 85 USD and another above 9,416,250 ind ≈ 606 USD. The minimum and maximum values were determined to be 1,000,000 ind ≈ 64 USD and 10,000,000 ind ≈ 644 USD, respectively. In the case of grades, twelve outliers were identified, ranging from below 76 to above 97. Nevertheless, since the data falls within the acceptable range of 0 to 100, these outliers should be retained as they are still considered normal and within the usual grade range. Finally, for house_area, we found eleven outliers below 34.4m and above 115m, with the minimum being 20m and the maximum being 120m. However, these values are still considered typical for the population. 
-## Correaltion analysis 
-Chi square test for nominal attribute:
+After conducting data analysis and identifying outliers, our inspection reveals that the detected outliers represent inherent variation within the population. Regarding Parent_age, outliers are observed for values below 44 and above 65. However, it should be noted that the minimum value is 40 and the maximum is 65, which fall within the normal range of outliers. For parent_salary, we found two outliers: one below 1,326,250 ind ≈ 85 USD and another above 9,416,250 ind ≈ 606 USD. The minimum and maximum values were determined to be 1,000,000 ind ≈ 64 USD and 10,000,000 ind ≈ 644 USD, respectively. In the case of grades, twelve outliers were identified, ranging from below 76 to above 97. Nevertheless, since the data falls within the acceptable range of 0 to 100, these outliers should be retained as they are still considered normal and within the usual grade range. Finally, for house_area, we found eleven outliers below 34.4m and above 115m, with the minimum being 20m and the maximum being 120m. However, these values are still considered typical for the population. \## Correaltion analysis Chi square test for nominal attribute:
 
 ```{r}
 #1
@@ -281,7 +279,9 @@ print(selected_features)
 
 ```
 
-To determine the relative importance of columns with respect to the class label, we employed a code that ranks the columns. The ranking is based on their significance in predicting the class label, with the most important columns listed first and the least important columns listed last. This approach allows us to prioritize the columns that have a stronger influence on the class label and aids us in focusing our analysis on the most relevant features. \## Normalization
+To determine the relative importance of columns with respect to the class label, we employed a code that ranks the columns. The ranking is based on their significance in predicting the class label, with the most important columns listed first and the least important columns listed last. This approach allows us to prioritize the columns that have a stronger influence on the class label and aids us in focusing our analysis on the most relevant features.
+
+### 
 
 ```{r}
 normalize <- function(x) {return((x-min(x))/ (max(x)-min(x)))}
@@ -348,4 +348,56 @@ Dataset$residence[Dataset$residence=="Rural"]<-0
 print(Dataset)
 ```
 
-Since encoding is an important step in data preprocessing that enables the use of categorical data in various data analysis and machine learning tasks, we encoded attributes like the 'parent was in college' attribute from (True, False) to (1, 0), and 'will go to college' from (True, False) to (0, 1). This encoding is carried out as we aim to predict the influencing factors. Additionally, we encoded the 'gender' attribute from (Female, Male) to (1, 0), 'school accreditation' from (A, B) to (1, 0), 'type_school' from (Academic, Vocational) to (1, 0), 'residence' from (Urban, Rural) to (1, 0), and 'interest' from (Very Interested, Less Interested, Uncertain) to (4,3,2, 1, 0) respectively. Encoding serves to simplify the data, reduce complexity, and enhance its suitability for modeling purposes.
+Since encoding is an important step in data preprocessing that enables the use of categorical data in various data analysis and machine learning tasks, we encoded attributes like the 'parent was in college' attribute from (True, False) to (1, 0), and 'will go to college' from (True, False) to (0, 1). This encoding is carried out as we aim to predict the influencing factors. Additionally, we encoded the 'gender' attribute from (Female, Male) to (1, 0), 'school accreditation' from (A, B) to (1, 0), 'type_school' from (Academic, Vocational) to (1, 0), 'residence' from (Urban, Rural) to (1, 0), and 'interest' from (Very interested ,Interested , Less Interested , Not Interested ,Uncertain ) to (4,3,2, 1, 0) respectively. Encoding serves to simplify the data, reduce complexity, and enhance its suitability for modeling purposes.
+
+## Correlation analysis Chi square test for nominal attribute:
+
+```{r}
+
+#1
+C=chisq.test(Dataset$type_school , Dataset$will_go_to_college)
+print(C)
+#2
+
+C=chisq.test(Dataset$school_accreditation , Dataset$will_go_to_college)
+print(C)
+#3
+C=chisq.test(Dataset$gender , Dataset$will_go_to_college)
+print(C)
+#4
+C=chisq.test(Dataset$interest , Dataset$will_go_to_college)
+print(C)
+
+#5
+C=chisq.test(Dataset$residence , Dataset$will_go_to_college)
+print(C)
+
+#6
+C=chisq.test(Dataset$average_grades , Dataset$will_go_to_college)
+print(C)
+
+#7
+C=chisq.test(Dataset$parent_was_in_college , Dataset$will_go_to_college)
+print(C)
+```
+
+All the attributes have X-square greater than the p-value which indicate a some association with the class label; therefore we reject the null hypothesis
+
+we noticed for 'interest' and 'average grade' the analysis shows that X-square is much larger than p-value indicate the significant association of the two attributes with the decision of the student to go to the collage or not
+
+## Correlation coefficient analysis for numeric attribute:
+
+```{r}
+
+biserial.cor(Dataset$parent_salary,Dataset$will_go_to_college, c("all.obs", "complete.obs"), level = 1)
+biserial.cor(Dataset$house_area,Dataset$will_go_to_college, c("all.obs", "complete.obs"), level = 1)
+biserial.cor(Dataset$parent_age,Dataset$will_go_to_college,c("all.obs", "complete.obs"), level = 1)
+```
+
+the analysis shows moderate correlation coefficient for parent salary and house area with the class label which indicate that they are relevant factors meaning that the higher the parent salary and the larger house area the higher probability for a student to enroll in a collage
+
+where is the on other hand, the correlation coefficient for the parent age is very small which indicate that the parent age has little impact to the probability for student to enroll in a collage
+
+## Feature selection:
+
+ultimately based on the analysis of the correlation that we conducted on the relationship of the dataset attributes with the class label, and the understanding of the data and the context of each attribute and potential relevance to the class label we decided to not delete any of the attribute
