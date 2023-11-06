@@ -8,10 +8,19 @@ Important packages:
 ```{r}
 setwd("Dataset")
 Dataset <- read.csv("data.csv")
-install.packages("ggplot2")
+
+if(!require(ggplot2)){
+install.packages("ggplot2")}
 library(ggplot2)
-install.packages("dplyr") 
+if(!require(dplyr)){
+install.packages("dplyr")}
 library(dplyr) 
+if(!require(dplyr)){
+install.packages("dplyr")}
+library(dplyr)
+if(!require(ltm)){
+install.packages("ltm")}
+library(ltm)
 ```
 
 # IT326 Project {style="color: gray"}
@@ -233,61 +242,21 @@ Lower <- quartiles[1] - 1.5*IQR
 Upper <- quartiles[2] + 1.5*IQR 
 
 data_no_outlier <- subset(data_no_outlier, data_no_outlier$house_area> Lower & data_no_outlier$house_area < Upper)
-dim(data_no_outlier)
+
+Founded_Outliers=data.frame(anti_join(Dataset,data_no_outlier))
+print(Founded_Outliers)
 ```
 
-After conducting data analysis and identifying outliers, our inspection reveals that the detected outliers represent inherent variation within the population. Regarding Parent_age, outliers are observed for values below 44 and above 65. However, it should be noted that the minimum value is 40 and the maximum is 65, which fall within the normal range of outliers. For parent_salary, we found two outliers: one below 1,326,250 ind ≈ 85 USD and another above 9,416,250 ind ≈ 606 USD. The minimum and maximum values were determined to be 1,000,000 ind ≈ 64 USD and 10,000,000 ind ≈ 644 USD, respectively. In the case of grades, twelve outliers were identified, ranging from below 76 to above 97. Nevertheless, since the data falls within the acceptable range of 0 to 100, these outliers should be retained as they are still considered normal and within the usual grade range. Finally, for house_area, we found eleven outliers below 34.4m and above 115m, with the minimum being 20m and the maximum being 120m. However, these values are still considered typical for the population. \## Correaltion analysis Chi square test for nominal attribute:
+After conducting data analysis and identifying outliers, our inspection reveals that the detected outliers represent inherent variation within the population. Regarding Parent_age, outliers are observed for values below 44 and above 65. However, it should be noted the age from 40 to 65 fall within the expected mean of our dataset meaning that it doesn't indicate that they are outliers . For parent_salary, we found two outliers: one below 1,326,250 ind ≈ 85 USD and another above 9,416,250 ind ≈ 606 USD. The minimum and maximum values were determined to be 1,000,000 ind ≈ 64 USD and 10,000,000 ind ≈ 644 USD, respectively. In the case of grades, twelve outliers were identified, ranging from below 76 to above 97. Nevertheless, since the data falls within the acceptable range of 0 to 100, these outliers should be retained as they are still considered normal and within the usual grade range. Finally, for house_area, we found eleven outliers below 34.4m and above 115m, with the minimum being 20m and the maximum being 120m. However, these values are still considered typical for the population.
 
-```{r}
-#1
-C=chisq.test(Dataset$interest , Dataset$will_go_to_college)
-print(C)
-#2
-C=chisq.test(Dataset$residence , Dataset$will_go_to_college)
-print(C)
-#3
-C=chisq.test(Dataset$type_school , Dataset$will_go_to_college)
-print(C)
-
-#3
-C=chisq.test(Dataset$school_accreditation , Dataset$will_go_to_college)
-print(C)
-```
-
-All the attributes have X-square greater than the p-value, therefore we will reject the null hypothesis except for the residence that has an X-square smaller than the p-value.
-
-## Feature selection
-
-```{r}
-cor(Dataset[, unlist(lapply(Dataset, is.numeric))])
-```
-
-After conducting a thorough analysis of the correlation, we determined that the correlation between the variables is significantly low. As a result, we reject the null hypothesis, indicating that the attributes are independent of each other.
-
-```{r}
-X <- Dataset[, c("gender","type_school","school_accreditation","interest","residence","average_grades","parent_age","parent_salary","parent_was_in_college","house_area")]
-y <- Dataset$will_go_to_college
-
-CV_folds <- 10
-train_control <- trainControl(method = "cv", number = CV_folds)
-
-method <- "glm"
-model <- train(X, y, method = method, trControl = train_control, metric = "AUC")
-selected_features <- varImp (model)
-print(selected_features)
-
-
-```
-
-To determine the relative importance of columns with respect to the class label, we employed a code that ranks the columns. The ranking is based on their significance in predicting the class label, with the most important columns listed first and the least important columns listed last. This approach allows us to prioritize the columns that have a stronger influence on the class label and aids us in focusing our analysis on the most relevant features.
-
-### 
+## Normalization
 
 ```{r}
 normalize <- function(x) {return((x-min(x))/ (max(x)-min(x)))}
 datasetWithoutNormalization<-Dataset
 Dataset$parent_salary<-normalize(datasetWithoutNormalization$parent_salary)
 Dataset$house_area<-normalize(datasetWithoutNormalization$house_area)
+print(Dataset)
 ```
 
 We applied normalization to the 'parent_salary' and 'house_area' attributes, scaling their values to a range between 0 and 1. This normalization process greatly facilitates data handling and analysis, ensuring that these attributes are on a consistent scale. Which will improve the reliability of our data analysis and enable better conclusions to be drawn from the dataset. Normalization is a crucial step in preparing the data for modeling, as it prevents attributes with larger numerical ranges from dominating the analysis and ensures fair treatment for all features.
