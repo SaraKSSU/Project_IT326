@@ -295,7 +295,7 @@ We applied normalization to the 'parent_salary' and 'house_area' attributes, sca
 ## Discretization
 
 ```{r}
-a
+
 
 Dataset$average_grades [Dataset$average_grades >= 95] <- '+A'
 Dataset$average_grades [95 >Dataset$average_grades & Dataset$average_grades >= 90] <- 'A'
@@ -345,7 +345,7 @@ Dataset$type_school[Dataset$type_school=="Vocational"]<-0
 
 Dataset$residence[Dataset$residence=="Urban"]<-1
 Dataset$residence[Dataset$residence=="Rural"]<-0
-
+print(Dataset)
 ```
 
-Since encoding is an important step in data preprocessing that enables the use of categorical data in various data analysis and machine learning tasks, we encoded attributes like the 'parent was in college' attribute from (True, False) to (1, 0), and 'will go to college' from (True, False) to (0, 1). This encoding is carried out as we aim to predict the influencing factors. Additionally, we encoded the 'gender' attribute from (Female, Male) to (1, 0), 'school accreditation' from (A, B) to (1, 0), 'type_school' from (Academic, Vocational) to (1, 0), 'residence' from (Urban, Rural) to (1, 0), and 'interest' from (Very Interested, Less Interested, Uncertain) to (2, 1, 0) respectively. Encoding serves to simplify the data, reduce complexity, and enhance its suitability for modeling purposes.
+Since encoding is an important step in data preprocessing that enables the use of categorical data in various data analysis and machine learning tasks, we encoded attributes like the 'parent was in college' attribute from (True, False) to (1, 0), and 'will go to college' from (True, False) to (0, 1). This encoding is carried out as we aim to predict the influencing factors. Additionally, we encoded the 'gender' attribute from (Female, Male) to (1, 0), 'school accreditation' from (A, B) to (1, 0), 'type_school' from (Academic, Vocational) to (1, 0), 'residence' from (Urban, Rural) to (1, 0), and 'interest' from (Very Interested, Less Interested, Uncertain) to (4,3,2, 1, 0) respectively. Encoding serves to simplify the data, reduce complexity, and enhance its suitability for modeling purposes.
