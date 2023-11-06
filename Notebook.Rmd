@@ -295,8 +295,7 @@ We applied normalization to the 'parent_salary' and 'house_area' attributes, sca
 ## Discretization
 
 ```{r}
-breaks<-c(40,50,60,70)
-Dataset$parent_age=cut(Dataset$parent_age,breaks = breaks)
+a
 
 Dataset$average_grades [Dataset$average_grades >= 95] <- '+A'
 Dataset$average_grades [95 >Dataset$average_grades & Dataset$average_grades >= 90] <- 'A'
