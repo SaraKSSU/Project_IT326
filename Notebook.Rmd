@@ -53,7 +53,7 @@ if (!require(tidyverse, quietly = TRUE)) {
 
 ## The Goal
 
-Our primary objective of this analysis is to identify the main factors and reasons why students are less likely to pursue higher education indicated by "will_go_to_college" being 'False'. By leveraging the provided dataset with attributes such as school type, school accreditation, gender, interest in college, residence, we aim to discover the most influential variables and their relationships with the decision not to attend college.
+Our primary objective of this analysis is to classify whatever a student will go to college or not using the classification methods and to identify the main factors and reasons why students are less likely to pursue higher education indicated by "will_go_to_college" being 'False'. By leveraging the provided dataset with attributes such as school type, school accreditation, gender, interest in college, residence, we aim to discover the most influential variables and their relationships with the decision not to attend college.
 
 ## The Source
 
