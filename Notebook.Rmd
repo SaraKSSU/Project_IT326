@@ -390,9 +390,10 @@ ultimately based on the analysis of the correlation that we conducted on the rel
 
 In this analysis, we apply K-means clustering to the dataset using different values of K. K-means clustering is an unsupervised learning algorithm that partitions the data into K clusters based on similarity. We will explore three different values of K and evaluate the clustering results using various metrics.
 
-### Removing the class label and preparing the dataset to the clustering process
+### Removing the class label and preparing the dataset for Clustering
 
 ```{r}
+ 
 original_data <- Preprocessed_dataset
 
 # Remove any non-numeric attributes
@@ -401,16 +402,213 @@ numeric_data <- original_data[, sapply(original_data, is.numeric)]
 # Remove the class label 'will_go_to_college'
 numeric_data <- numeric_data[, !(names(numeric_data) == 'will_go_to_college')]
 
+
 # Print the dataset "numeric_data" to make sure it's prepared for clustering
 print(numeric_data)
+
+# Scaling the dataset
+# numeric_data <- scale(numeric_data)
+
+ 
 ```
 
 Now, the 'numeric_dataset' dataset contains only numeric attributes without the class label, which makes it ready for the clustering process.
 
-### K=2
+## K=2
 
 ```{r}
- 
-  
+# k-means clustering set a seed for random number generation to make the results reproducible 
+set.seed(8953)
 
+# run kmeans clustering to find 2 clusters
+kmeans.result <- kmeans(numeric_data, 2)
+
+# visualize clustering
+library(factoextra)
+fviz_cluster(kmeans.result, data = numeric_data)
+
+# print the clustering result
+print(kmeans.result)
+
+
+```
+
+#### The Silhouette coefficient
+
+```{r}
+#average for each cluster 
+avg_sil <- silhouette(kmeans.result$cluster, dist(numeric_data)) 
+
+#k-means clustering with estimating k and initializations 
+fviz_silhouette(avg_sil)
+
+```
+
+#### The total within-cluster sum of squares
+
+```{r}
+# Calculate total within-cluster sum of squares
+total_withinss <- kmeans.result$tot.withinss
+cat("Total Within-Cluster Sum of Squares:", sum(total_withinss), "\n")
+
+true_labels <- c(1, 1, 2, 1, 2, 2, 3, 3, 4, 4)  # Adjust based on your actual true labels
+
+cluster_assignments <- kmeans.result$cluster
+ 
+```
+
+#### BCubed recall and precision
+
+```{r}
+
+# Calculate BCubed precision
+precision <- 0
+for (i in unique(true_labels)) {
+  cluster_indices <- which(true_labels == i)
+  precision <- precision + sum((table(cluster_assignments[cluster_indices]) * (table(cluster_assignments[cluster_indices]) - 1)) / sum(table(cluster_assignments[cluster_indices])))
+}
+precision <- precision / sum(table(cluster_assignments))
+
+# Calculate BCubed recall
+recall <- 0
+for (j in unique(cluster_assignments)) {
+  cluster_indices <- which(cluster_assignments == j)
+  recall <- recall + sum((table(true_labels[cluster_indices]) * (table(true_labels[cluster_indices]) - 1)) / sum(table(true_labels[cluster_indices])))
+}
+recall <- recall / sum(table(true_labels))
+
+cat("BCubed Precision:", precision, "\n")
+cat("BCubed Recall:", recall, "\n")
+
+
+```
+
+## K=2
+
+```{r}
+# k-means clustering set a seed for random number generation to make the results reproducible 
+set.seed(8953)
+
+# run kmeans clustering to find 2 clusters
+kmeans.result <- kmeans(numeric_data, 2)
+
+# visualize clustering
+library(factoextra)
+fviz_cluster(kmeans.result, data = numeric_data)
+
+# print the clustering result
+print(kmeans.result)
+
+
+```
+
+#### The Silhouette coefficient
+
+```{r}
+#average for each cluster 
+avg_sil <- silhouette(kmeans.result$cluster, dist(numeric_data)) 
+
+#k-means clustering with estimating k and initializations 
+fviz_silhouette(avg_sil)
+
+```
+
+#### The total within-cluster sum of squares
+
+```{r}
+# Calculate total within-cluster sum of squares
+total_withinss <- kmeans.result$tot.withinss
+cat("Total Within-Cluster Sum of Squares:", sum(total_withinss), "\n")
+
+true_labels <- c(1, 1, 2, 1, 2, 2, 3, 3, 4, 4)  # Adjust based on your actual true labels
+
+cluster_assignments <- kmeans.result$cluster
+ 
+```
+
+#### BCubed recall and precision
+
+```{r}
+
+# Calculate BCubed precision
+precision <- 0
+for (i in unique(true_labels)) {
+  cluster_indices <- which(true_labels == i)
+  precision <- precision + sum((table(cluster_assignments[cluster_indices]) * (table(cluster_assignments[cluster_indices]) - 1)) / sum(table(cluster_assignments[cluster_indices])))
+}
+precision <- precision / sum(table(cluster_assignments))
+
+# Calculate BCubed recall
+recall <- 0
+for (j in unique(cluster_assignments)) {
+  cluster_indices <- which(cluster_assignments == j)
+  recall <- recall + sum((table(true_labels[cluster_indices]) * (table(true_labels[cluster_indices]) - 1)) / sum(table(true_labels[cluster_indices])))
+}
+recall <- recall / sum(table(true_labels))
+
+cat("BCubed Precision:", precision, "\n")
+cat("BCubed Recall:", recall, "\n")
+
+
+```
+
+## K=6
+
+```{r}
+# k-means clustering set a seed for random number generation to make the results reproducible 
+set.seed(8953)
+
+# run kmeans clustering to find 6 clusters
+kmeans.result <- kmeans(numeric_data, 6)
+
+# visualize clustering
+library(factoextra)
+fviz_cluster(kmeans.result, data = numeric_data)
+
+# print the clustering result
+print(kmeans.result)
+
+library(cluster) 
+#average for each cluster 
+avg_sil <- silhouette(kmeans.result$cluster,dist(numeric_data)) 
+
+#k-means clustering with estimating k and initializations 
+fviz_silhouette(avg_sil)
+```
+
+### The optimal number of cluster
+
+To find the optimal number of clusters to use in the k-means algorithm, we'll use the **fviz_nbclust()** function from the **factoextra**package to create a plot of the number of clusters vs. the total within sum of squares
+
+```{r}
+# Function to calculate total within-cluster sum of squares (wss)
+wss <- function(k) {
+  kmeans_result <- kmeans(numeric_data, centers = k, nstart = 10)  # You can adjust nstart based on your preference
+  return(sum(kmeans_result$tot.withinss))
+}
+
+# Calculate the total within-cluster sum of squares for different values of k
+k_values <- 1:10  # You can adjust the range of k values
+wss_values <- sapply(k_values, wss)
+
+# Plot the elbow curve
+plot(k_values, wss_values, type = "b", pch = 19, frame = FALSE, 
+     xlab = "Number of Clusters (k)", ylab = "Total Within-Cluster Sum of Squares (WSS)",
+     main = "Elbow Method")
+
+# Adding a line to indicate the "elbow"
+abline(v = which(diff(wss_values) == max(diff(wss_values))) + 1, col = "red")
+
+
+```
+
+```{r}
+gap_stat <- clusGap(numeric_data,
+                    FUN = kmeans,
+                    nstart = 25,
+                    K.max = 10,
+                    B = 50)
+
+#plot number of clusters vs. gap statistic
+fviz_gap_stat(gap_stat)
 ```
