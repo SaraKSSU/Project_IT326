@@ -36,7 +36,7 @@ if (!require(factoextra, quietly = TRUE)) {
 
 ## The Goal
 
-Our primary objective of this analysis is to identify the main factors and reasons why students are less likely to pursue higher education indicated by "will_go_to_college" being 'False'. By leveraging the provided dataset with attributes such as school type, school accreditation, gender, interest in college, residence, we aim to discover the most influential variables and their relationships with the decision not to attend college.
+Our primary objective of this analysis is to classify whatever a student will go to college or not using the classification methods and to identify the main factors and reasons why students are less likely to pursue higher education indicated by "will_go_to_college" being 'False'. By leveraging the provided dataset with attributes such as school type, school accreditation, gender, interest in college, residence, we aim to discover the most influential variables and their relationships with the decision not to attend college.
 
 ## The Source
 
@@ -54,33 +54,33 @@ Kaggle.com
 
 ------------------------------------------------------------------------
 
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
-| Attribute             | Description                                                | Type      | Possible values                                                           |
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
-| type_school           | The type of school the student attends                     | Binary    | Academic / Vocational                                                     |
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
-| school_accreditation  | The quality if school                                      | Binary    | A / B (A is better than B)                                                |
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
-| gender                | The student's gender                                       | Binary    | Male / Female                                                             |
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
-| interest              | The student's interest in going to college                 | Nominal   | Very interested /Interested / Less Interested / Not Interested /Uncertain |
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
-| residence             | The student's residence                                    | Binary    | Urban / Rural                                                             |
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
-| parent_age            | The age of the student's parents                           | Numeric   | 40 - 65                                                                   |
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
-| parent_salary         | The monthly salary of the student's parents in IDR/Rupiah. | Numeric   | 1000K - 10M                                                               |
-|                       |                                                            |           |                                                                           |
-|                       | [1Rupiah = 0.00024SAR]                                     |           |                                                                           |
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
-| house_area            | The size of the student's house in meter square            | Numeric   | 20 - 120                                                                  |
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
-| average_grades        | The student's average grades in school.                    | Numeric   | 75 - 98                                                                   |
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
-| parent_was_in_college | Whether the student's parents attended college.            | Binary    | True - False                                                              |
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
-| will_go_to_college    | Whether the student plans to go to college.                | Binary    | True - False                                                              |
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
+| Attribute             | Description                                                | Type    | Possible values                                                           |
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
+| type_school           | The type of school the student attends                     | Binary  | Academic / Vocational                                                     |
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
+| school_accreditation  | The quality if school                                      | Binary  | A / B (A is better than B)                                                |
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
+| gender                | The student's gender                                       | Binary  | Male / Female                                                             |
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
+| interest              | The student's interest in going to college                 | Nominal | Very interested /Interested / Less Interested / Not Interested /Uncertain |
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
+| residence             | The student's residence                                    | Binary  | Urban / Rural                                                             |
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
+| parent_age            | The age of the student's parents                           | Numeric | 40 - 65                                                                   |
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
+| parent_salary         | The monthly salary of the student's parents in IDR/Rupiah. | Numeric | 1000K - 10M                                                               |
+|                       |                                                            |         |                                                                           |
+|                       | [1Rupiah = 0.00024SAR]                                     |         |                                                                           |
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
+| house_area            | The size of the student's house in meter square            | Numeric | 20 - 120                                                                  |
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
+| average_grades        | The student's average grades in school.                    | Numeric | 75 - 98                                                                   |
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
+| parent_was_in_college | Whether the student's parents attended college.            | Binary  | True - False                                                              |
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
+| will_go_to_college    | Whether the student plans to go to college.                | Binary  | True - False                                                              |
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
 
 ## Sample of our data
 
@@ -483,14 +483,14 @@ cat("BCubed Recall:", recall, "\n")
 
 ```
 
-## K=2
+## K=4
 
 ```{r}
 # k-means clustering set a seed for random number generation to make the results reproducible 
 set.seed(8953)
 
-# run kmeans clustering to find 2 clusters
-kmeans.result <- kmeans(numeric_data, 2)
+# run kmeans clustering to find 4 clusters
+kmeans.result <- kmeans(numeric_data, 4)
 
 # visualize clustering
 library(factoextra)
@@ -576,7 +576,7 @@ avg_sil <- silhouette(kmeans.result$cluster,dist(numeric_data))
 fviz_silhouette(avg_sil)
 ```
 
-### The optimal number of cluster
+### The optimal number of clusters
 
 To find the optimal number of clusters to use in the k-means algorithm, we'll use the **fviz_nbclust()** function from the **factoextra**package to create a plot of the number of clusters vs. the total within sum of squares
 
