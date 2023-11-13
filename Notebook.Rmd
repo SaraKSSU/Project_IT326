@@ -648,15 +648,18 @@ data$school_accreditation <- factor(data$school_accreditation, levels = c("1", "
 
 data$average_grades <- factor(data$average_grades, levels = c("+A", "A","+B","B","+C","C","+D","D","F"), labels = c("+A", "A","+B","B","+C","C","+D","D","F"))
 str(data)
+
 ```
 
 ### balanced or imbalanced
 
 ```{r}
 
-library(tidyverse)  
+library(tidyverse) 
 library(caret)
-hist(data$will_go_to_college,col="coral") prop.table(table(data$will_go_to_college))
+data$will_go_to_college<- as.numeric(data$will_go_to_college)
+hist(data$will_go_to_college,col="coral")
+prop.table(table(data$will_go_to_college))
 ```
 
 we want to confirm that the distribution between the two label data is not too much different. Because imbalanced datasets can lead to imbalanced accuracy.
