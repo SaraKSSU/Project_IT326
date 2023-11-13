@@ -8,7 +8,7 @@ Important packages:
 ```{r}
 setwd("Dataset")
 Dataset <- read.csv("data.csv")
-
+Preprocessed_dataset <-  read.csv("preprocessed_dataset.csv") 
 if(!require(ggplot2)){
 install.packages("ggplot2")}
 library(ggplot2)
@@ -21,6 +21,13 @@ library(dplyr)
 if(!require(ltm)){
 install.packages("ltm")}
 library(ltm)
+if (!require(cluster, quietly = TRUE)) {
+  install.packages("cluster")
+}
+if (!require(factoextra, quietly = TRUE)) {
+  install.packages("factoextra")
+}
+ 
 ```
 
 # IT326 Project {style="color: gray"}
@@ -47,33 +54,33 @@ Kaggle.com
 
 ------------------------------------------------------------------------
 
-+-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
-| Attribute             | Description                                                | Type       | Possible values                                                            |
-+-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
-| type_school           | The type of school the student attends                     | Binary     | Academic / Vocational                                                      |
-+-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
-| school_accreditation  | The quality if school                                      | Binary     | A / B (A is better than B)                                                 |
-+-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
-| gender                | The student's gender                                       | Binary     | Male / Female                                                              |
-+-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
-| interest              | The student's interest in going to colleege                | Nominal    | Very interested /Interested / Less Interested / Not Interested /Uncertain  |
-+-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
-| residence             | The student's residence                                    | Binary     | Urban / Rural                                                              |
-+-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
-| parent_age            | The age of the student's parents                           | Numeric    | 40 - 65                                                                    |
-+-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
-| parent_salary         | The monthly salary of the student's parents in IDR/Rupiah. | Numeric    | 1000K - 10M                                                                |
-|                       |                                                            |            |                                                                            |
-|                       | [1Rupiah = 0.00024SAR]                                     |            |                                                                            |
-+-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
-| house_area            | The size of the student's house in meter square            | Numeric    | 20 - 120                                                                   |
-+-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
-| average_grades        | The student's average grades in school.                    | Numeric    | 75 - 98                                                                    |
-+-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
-| parent_was_in_college | Whether the student's parents attended college.            | Binary     | True - False                                                               |
-+-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
-| will_go_to_college    | Whether the student plans to go to college.                | Binary     | True - False                                                               |
-+-----------------------+------------------------------------------------------------+------------+----------------------------------------------------------------------------+
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
+| Attribute             | Description                                                | Type      | Possible values                                                           |
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
+| type_school           | The type of school the student attends                     | Binary    | Academic / Vocational                                                     |
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
+| school_accreditation  | The quality if school                                      | Binary    | A / B (A is better than B)                                                |
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
+| gender                | The student's gender                                       | Binary    | Male / Female                                                             |
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
+| interest              | The student's interest in going to college                 | Nominal   | Very interested /Interested / Less Interested / Not Interested /Uncertain |
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
+| residence             | The student's residence                                    | Binary    | Urban / Rural                                                             |
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
+| parent_age            | The age of the student's parents                           | Numeric   | 40 - 65                                                                   |
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
+| parent_salary         | The monthly salary of the student's parents in IDR/Rupiah. | Numeric   | 1000K - 10M                                                               |
+|                       |                                                            |           |                                                                           |
+|                       | [1Rupiah = 0.00024SAR]                                     |           |                                                                           |
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
+| house_area            | The size of the student's house in meter square            | Numeric   | 20 - 120                                                                  |
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
+| average_grades        | The student's average grades in school.                    | Numeric   | 75 - 98                                                                   |
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
+| parent_was_in_college | Whether the student's parents attended college.            | Binary    | True - False                                                              |
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
+| will_go_to_college    | Whether the student plans to go to college.                | Binary    | True - False                                                              |
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
 
 ## Sample of our data
 
@@ -130,12 +137,17 @@ The graph shows that the average grades for students who had accepted to go to c
 Graph 3:
 
 ```{r}
-ggplot(Dataset, aes(x = type_school, fill = will_go_to_college)) +
-  geom_bar(position = "dodge") +
-  labs(title = "Student's Type of School vs College Attendance",
+Dataset_percentage <- Dataset %>%
+  group_by(type_school) %>%
+  summarise(percentage = mean(will_go_to_college == "True") * 100)
+
+# Create a percentage chart
+ggplot(Dataset_percentage, aes(x = type_school, y = percentage, fill = type_school)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Percentage of Students Going to College by Type of School",
        x = "Type of School",
-       y = "Count") +
-  scale_fill_manual(values = c("True" = "antiquewhite3", "False" = "antiquewhite2")) +
+       y = "Percentage") +
+  scale_fill_manual(values = c("Academic" = "antiquewhite3", "Vocational" = "antiquewhite2")) +
   theme_minimal()
 
  
@@ -361,6 +373,9 @@ we noticed for 'interest' and 'average grade' the analysis shows that X-square i
 biserial.cor(Dataset$parent_salary,Dataset$will_go_to_college, c("all.obs", "complete.obs"), level = 1)
 biserial.cor(Dataset$house_area,Dataset$will_go_to_college, c("all.obs", "complete.obs"), level = 1)
 biserial.cor(Dataset$parent_age,Dataset$will_go_to_college,c("all.obs", "complete.obs"), level = 1)
+ 
+ 
+
 ```
 
 the analysis shows moderate correlation coefficient for parent salary and house area with the class label which indicate that they are relevant factors meaning that the higher the parent salary and the larger house area the higher probability for a student to enroll in a collage
@@ -370,3 +385,32 @@ where is the on other hand, the correlation coefficient for the parent age is ve
 ## Feature selection:
 
 ultimately based on the analysis of the correlation that we conducted on the relationship of the dataset attributes with the class label, and the understanding of the data and the context of each attribute and potential relevance to the class label we decided to not delete any of the attribute
+
+## Clustering **Analysis:**
+
+In this analysis, we apply K-means clustering to the dataset using different values of K. K-means clustering is an unsupervised learning algorithm that partitions the data into K clusters based on similarity. We will explore three different values of K and evaluate the clustering results using various metrics.
+
+### Removing the class label and preparing the dataset to the clustering process
+
+```{r}
+original_data <- Preprocessed_dataset
+
+# Remove any non-numeric attributes
+numeric_data <- original_data[, sapply(original_data, is.numeric)]
+
+# Remove the class label 'will_go_to_college'
+numeric_data <- numeric_data[, !(names(numeric_data) == 'will_go_to_college')]
+
+# Print the dataset "numeric_data" to make sure it's prepared for clustering
+print(numeric_data)
+```
+
+Now, the 'numeric_dataset' dataset contains only numeric attributes without the class label, which makes it ready for the clustering process.
+
+### K=2
+
+```{r}
+ 
+  
+
+```
