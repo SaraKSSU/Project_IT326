@@ -28,6 +28,24 @@ if (!require(factoextra, quietly = TRUE)) {
   install.packages("factoextra")
 }
  
+if (!require(caret, quietly = TRUE)) {
+  install.packages("caret")
+}
+
+if (!require(partykit, quietly = TRUE)) {
+  install.packages("partykit")
+}
+
+if (!require(rpart, quietly = TRUE)) {
+  install.packages("rpart")
+}
+if (!require(rpart.plot, quietly = TRUE)) {
+  install.packages("rpart.plot")
+}
+if (!require(tidyverse, quietly = TRUE)) {
+  install.packages("tidyverse")
+}
+ 
 ```
 
 # IT326 Project {style="color: gray"}
@@ -54,33 +72,33 @@ Kaggle.com
 
 ------------------------------------------------------------------------
 
-+-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
-| Attribute             | Description                                                | Type    | Possible values                                                           |
-+-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
-| type_school           | The type of school the student attends                     | Binary  | Academic / Vocational                                                     |
-+-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
-| school_accreditation  | The quality if school                                      | Binary  | A / B (A is better than B)                                                |
-+-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
-| gender                | The student's gender                                       | Binary  | Male / Female                                                             |
-+-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
-| interest              | The student's interest in going to college                 | Nominal | Very interested /Interested / Less Interested / Not Interested /Uncertain |
-+-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
-| residence             | The student's residence                                    | Binary  | Urban / Rural                                                             |
-+-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
-| parent_age            | The age of the student's parents                           | Numeric | 40 - 65                                                                   |
-+-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
-| parent_salary         | The monthly salary of the student's parents in IDR/Rupiah. | Numeric | 1000K - 10M                                                               |
-|                       |                                                            |         |                                                                           |
-|                       | [1Rupiah = 0.00024SAR]                                     |         |                                                                           |
-+-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
-| house_area            | The size of the student's house in meter square            | Numeric | 20 - 120                                                                  |
-+-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
-| average_grades        | The student's average grades in school.                    | Numeric | 75 - 98                                                                   |
-+-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
-| parent_was_in_college | Whether the student's parents attended college.            | Binary  | True - False                                                              |
-+-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
-| will_go_to_college    | Whether the student plans to go to college.                | Binary  | True - False                                                              |
-+-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
+| Attribute             | Description                                                | Type      | Possible values                                                           |
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
+| type_school           | The type of school the student attends                     | Binary    | Academic / Vocational                                                     |
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
+| school_accreditation  | The quality if school                                      | Binary    | A / B (A is better than B)                                                |
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
+| gender                | The student's gender                                       | Binary    | Male / Female                                                             |
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
+| interest              | The student's interest in going to college                 | Nominal   | Very interested /Interested / Less Interested / Not Interested /Uncertain |
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
+| residence             | The student's residence                                    | Binary    | Urban / Rural                                                             |
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
+| parent_age            | The age of the student's parents                           | Numeric   | 40 - 65                                                                   |
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
+| parent_salary         | The monthly salary of the student's parents in IDR/Rupiah. | Numeric   | 1000K - 10M                                                               |
+|                       |                                                            |           |                                                                           |
+|                       | [1Rupiah = 0.00024SAR]                                     |           |                                                                           |
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
+| house_area            | The size of the student's house in meter square            | Numeric   | 20 - 120                                                                  |
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
+| average_grades        | The student's average grades in school.                    | Numeric   | 75 - 98                                                                   |
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
+| parent_was_in_college | Whether the student's parents attended college.            | Binary    | True - False                                                              |
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
+| will_go_to_college    | Whether the student plans to go to college.                | Binary    | True - False                                                              |
++-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
 
 ## Sample of our data
 
@@ -394,25 +412,29 @@ ultimately based on the analysis of the correlation that we conducted on the rel
 
 data <- Preprocessed_dataset
 
-data$will_go_to_college <- factor(data$will_go_to_college, levels = c("1", "0"), labels = c("1", "0"))
-data$residence <- factor(data$residence, levels = c("1", "0"), labels = c("1", "0"))
-data$gender <- factor(data$gender, levels = c("1", "0"), labels = c("1", "0"))
-data$parent_was_in_college <- factor(data$parent_was_in_college, levels = c("1", "0"), labels = c("1", "0"))
-data$interest <- factor(data$interest, levels = c("4","3","2","1", "0"), labels = c("4","3","2","1", "0"))
-data$type_school <- factor(data$type_school, levels = c("1", "0"), labels = c("1", "0"))
-data$school_accreditation <- factor(data$school_accreditation, levels = c("1", "0"), labels = c("1", "0"))
 
-data$average_grades <- factor(data$average_grades, levels = c("+A", "A","+B","B","+C","C","+D","D","F"), labels = c("+A", "A","+B","B","+C","C","+D","D","F"))
+data$will_go_to_college <- as.factor(data$will_go_to_college)
+data$residence <- as.factor(data$residence)
+data$gender <- as.factor(data$gender)
+data$parent_was_in_college <- as.factor(data$parent_was_in_college)
+data$interest <- as.factor(data$interest)
+data$type_school <- as.factor(data$type_school)
+data$school_accreditation <- as.factor(data$school_accreditation)
+
+data$average_grades <- as.factor(data$average_grades)
 str(data)
+
 ```
 
 ### balanced or imbalanced
 
 ```{r}
 
-library(tidyverse)  
+library(tidyverse) 
 library(caret)
-hist(data$will_go_to_college,col="coral") prop.table(table(data$will_go_to_college))
+data$will_go_to_college<- as.numeric(data$will_go_to_college)
+hist(data$will_go_to_college,col="coral")
+prop.table(table(data$will_go_to_college))
 ```
 
 we want to confirm that the distribution between the two label data is not too much different. Because imbalanced datasets can lead to imbalanced accuracy.
@@ -431,14 +453,13 @@ library(rpart)
 library(dplyr)
 library(rpart.plot)
 
-
 set.seed(123)
 fold <- c(2, 3, 4)  # Values of xval (number of folds) to try
 
 for (fold in fold) {
   cat("fold =", fold, "\n")
   trctrl <- trainControl(method = "cv", number = fold, savePredictions = TRUE)
-  c45_fit <- train(will_go_to_college ~ ., data = data, method = "J48", trControl = trctrl)
+  c45_fit <- train(factor(will_go_to_college) ~ ., data = data, method = "J48", trControl = trctrl)
    print(c45_fit$finalModel)
   # Get predicted values
   predictions <- predict(c45_fit, newdata = data)
@@ -568,9 +589,10 @@ library(rpart.plot)
 
 folds <- c(2, 3, 4)  # Values of xval (number of folds) to try
 
-for(folds in folds){
-for (fold_val in 1:folds) {
+for(folds in folds){ 
   cat("fold =", fold_val, "\n")
+for (fold_val in 1:folds) {
+ 
   
   trctrl <- trainControl(method = "cv", number = fold_val, savePredictions = TRUE)
   c45_fit <- train(factor(will_go_to_college) ~ ., data = data, method = "J48", trControl = trctrl)
@@ -599,6 +621,92 @@ for (fold_val in 1:folds) {
  
 
 }
+```
+
+### all trees of ID3
+
+```{r}
+library(caret)
+library(partykit)
+library(dplyr)
+
+fold <- c(4, 3, 2)  # Values of xval (number of folds) to try
+
+for (fold in fold) {
+   cat("fold =", fold, "\n")
+  for(i in 1:fold){
+  trctrl <- trainControl(method = "cv", number = fold, savePredictions = TRUE)
+  
+  id_fit <- train(factor(will_go_to_college) ~ ., data = data, method = "ctree", trControl = trctrl, subset = trctrl$indexes[[i]])
+  
+    plot(id_fit$finalModel, main = paste("Decision Tree (Fold", fold,"-", i, ")"))
+}
+   
+  # Get predicted values
+  predictions <- predict(id_fit, newdata = data)
+  
+  # Create confusion matrix
+  confusion_matrix <- confusionMatrix(predictions, data$will_go_to_college)
+  
+  # Print the confusion matrix
+  print(confusion_matrix)
+  
+  # Print accuracy for each fold
+  pred <- id_fit$pred
+  pred$equal <- ifelse(pred$pred == pred$obs, 1, 0)
+  eachfold <- pred %>%
+    group_by(Resample) %>%
+    summarise_at(vars(equal), list(Accuracy = mean))
+  print(eachfold)
+
+  # Plot decision tree
+
+
+}
+```
+
+### all trees of Cart
+
+```{r}
+library(caret)
+library(rpart)
+library(rpart.plot)
+
+set.seed(123) # Random seed
+fold <- c(2, 3, 4)  # Values of xval (number of folds) to try
+
+for (fold in fold) {
+  cat("fold"=fold)
+  for(i in 1:fold){
+
+trctrl <- trainControl(method = "cv", number = fold, savePredictions = TRUE)
+dt_fit <- train(factor(will_go_to_college) ~ ., data = data, method = "rpart1SE", trControl = trctrl)
+
+ # Plot decision tree
+  cat("Decision Tree - Fold", i, ":\n")
+  rpart.plot(dt_fit$finalModel)
+  
+}
+# Get predicted values
+predictions <- predict(dt_fit, newdata = data)
+
+# Create confusion matrix
+confusion_matrix <- confusionMatrix(predictions, data$will_go_to_college)
+
+# Print the confusion matrix
+print(confusion_matrix)
+
+#print each flod
+pred <- dt_fit$pred
+pred$equal <- ifelse(pred$pred == pred$obs, 1,0)
+eachfold <- pred %>%                                        
+  group_by(Resample) %>%                         
+  summarise_at(vars(equal),                     
+               list(Accuracy = mean))              
+print(eachfold  )
+
+  }
+
 ```
 
 ## Clustering **Analysis:**
@@ -863,4 +971,3 @@ abline(v = which(diff(wss_values) == max(diff(wss_values))) + 1, col = "red")
 ```
 
 According to the output the best number of clusters is one,
-
