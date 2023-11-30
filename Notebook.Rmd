@@ -406,13 +406,14 @@ ultimately based on the analysis of the correlation that we conducted on the rel
 
 ## Classification:
 
+The attribute selection measure is a heuristic technique employed to select the most optimal criteria for dividing a collection of data tuples into partitions that are as pure as possible. Several attribute selection measures are commonly utilized, such as Information Gain (ID3), Gain Ratio (C4.5), and Gini Index (CART). we will constraints for Each of these measures different partitions by dividing them in ratios of 50%-50%, 70%-30%, and 80%-20%.
+
 ### factor the data
 
 ```{r}
 
-data <- Preprocessed_dataset
 
-
+data<-Preprocessed_dataset
 data$will_go_to_college <- as.factor(data$will_go_to_college)
 data$residence <- as.factor(data$residence)
 data$gender <- as.factor(data$gender)
@@ -420,9 +421,7 @@ data$parent_was_in_college <- as.factor(data$parent_was_in_college)
 data$interest <- as.factor(data$interest)
 data$type_school <- as.factor(data$type_school)
 data$school_accreditation <- as.factor(data$school_accreditation)
-
 data$average_grades <- as.factor(data$average_grades)
-str(data)
 
 ```
 
@@ -441,273 +440,398 @@ we want to confirm that the distribution between the two label data is not too m
 
 Fortunately ,our data is balanced
 
-### partition method
-
-We opted for cross-validation as our partition method owing to the constraints posed by limited data availability. To ensure robustness in our evaluation, we employed three distinct values for k folds 2, 3, and 4. we chose small k folds because of our small data
-
-### c4.5
+| **70% training, 30% testing** |
+|-------------------------------|
 
 ```{r}
-library(caret)
-library(rpart)
-library(dplyr)
-library(rpart.plot)
+set.seed(123
+         )
+ind=sample(2, nrow(data), replace=TRUE, prob=c(0.70 , 0.30))
+train_data=data[ind==1,]
+test_data=data[ind==2,]
+dim(train_data)
+dim(test_data)
+```
 
+We partition the data the data into (70% training, 30% testing). This result in 705 object in the training set and 295 object in the testing set.
+
+#### **information gain**
+
+```{r}
+library(party)
+myFormula<- will_go_to_college~ + type_school+school_accreditation+gender+interest+residence+parent_age+parent_salary+house_area+average_grades+parent_was_in_college
+dataset_ctree<-ctree(myFormula, data=train_data)
+
+table(predict(dataset_ctree), train_data$will_go_to_college) 
+plot(dataset_ctree,type="simple")
+testPred <- predict(dataset_ctree, newdata = test_data)
+result<-table(testPred, test_data$will_go_to_college )
+library(caret)
+co_result <- confusionMatrix(result, positive = "1")
+print(co_result)
+```
+
+![](images/WhatsApp Image 2023-11-30 at 19.36.29_0e85e418.jpg)
+
+this matrix below show the evaluation model on testing data
+
+| Evaluation method | Method |
+|-------------------|--------|
+| Accuracy          | 82.37% |
+| Error rate        | 17.63% |
+| Sensitivity       | 75.89% |
+| Specificity       | 88.31% |
+| Precision         | 85.60% |
+
+average grade with the highest information gain is chosen as the root attribute.
+
+#### **Gain ratio**
+
+```{r}
+library(RWeka)
+C45Fit <- J48( will_go_to_college~.,data=train_data)
+table(train_data$will_go_to_college, predict(C45Fit))
+plot(C45Fit,type = "simple")
+testPred <- predict(C45Fit, newdata = test_data)
+results <- confusionMatrix(testPred, test_data$will_go_to_college, positive = "1")
+print(results)
+```
+
+![](images/WhatsApp%20Image%202023-11-30%20at%2019.53.30_4eacbc86.jpg)
+
+this matrix below show the evaluation model on testing data
+
+| Evaluation method | Method |
+|-------------------|--------|
+| Accuracy          | 80.34% |
+| Error rate        | 19.66% |
+| Sensitivity       | 77.30% |
+| Specificity       | 83.12% |
+| Precision         | 80.74% |
+
+Parent salary is chosen as the root due to its high Gain ratio
+
+#### **Gini index**
+
+```{r}
+library(rpart)
+library(rpart.plot)
+cart_fit=rpart(will_go_to_college~., data=train_data, method="class",cp=0.008)
+
+
+rpart.plot(cart_fit)
+
+testPred<- predict(cart_fit,newdata=test_data,type="class")
+results<- confusionMatrix(testPred,test_data$will_go_to_college,positive="1")
+print(results)
+
+```
+
+this matrix below show the evaluation model on testing data
+
+| Evaluation method | Method |
+|-------------------|--------|
+| Accuracy          | 79.66% |
+| Error rate        | 20.34% |
+| Sensitivity       | 78.01% |
+| Specificity       | 81.17% |
+| Precision         | 79.14% |
+
+Parent salary is chosen as the root due to its high Gain index.
+
+| 80% training, 20% testing |
+|---------------------------|
+
+```{r}
 set.seed(123)
-fold <- c(2, 3, 4)  # Values of xval (number of folds) to try
-
-for (fold in fold) {
-  cat("fold =", fold, "\n")
-  trctrl <- trainControl(method = "cv", number = fold, savePredictions = TRUE)
-  c45_fit <- train(factor(will_go_to_college) ~ ., data = data, method = "J48", trControl = trctrl)
-   print(c45_fit$finalModel)
-  # Get predicted values
-  predictions <- predict(c45_fit, newdata = data)
-  
-  # Create confusion matrix
-  confusion_matrix <- confusionMatrix(predictions, data$will_go_to_college)
-  
-  # Print the confusion matrix
-  print(confusion_matrix)
-  
-  # Print accuracy for each fold
-  pred <- c45_fit$pred
-  pred$equal <- ifelse(pred$pred == pred$obs, 1, 0)
-  eachfold <- pred %>%
-    group_by(Resample) %>%
-    summarise_at(vars(equal),
-                 list(Accuracy = mean))
-  print(eachfold)
-    # Plot decision tree
-plot(c45_fit$finalModel, main = fold)
-  
-}
+ind=sample(2, nrow(data), replace=TRUE, prob=c(0.80 , 0.20))
+train_data=data[ind==1,]
+test_data=data[ind==2,]
+dim(train_data)
+dim(test_data)
 ```
 
-The gain ratio consistently favors unbalanced splits, as demonstrated by its selection of "Parent salary" as the root for all three trees even though it's shown in the tree "average grades" as the root but the split point's that all the value in one diraction . In this configuration, one partition is notably smaller than the others, and the feature exhibits a higher number of distinct values. Despite the fact that the node corresponding to "Parent age", "parent was in collage" is not pure, the resulting trees exhibit impressive accuracy levels, all surpassing 94%
+We partition the data the data into (80% training, 20% testing). This result in 802 object in the training set and 198 object in the testing set.
 
-### cart
+#### **information gain**
 
 ```{r}
+library(party)
+myFormula<- will_go_to_college~ + type_school+school_accreditation+gender+interest+residence+parent_age+parent_salary+house_area+average_grades+parent_was_in_college
+
+dataset_ctree<-ctree(myFormula, data=train_data)
+table(predict(dataset_ctree), train_data$will_go_to_college) 
+plot(dataset_ctree,type="simple")
+testPred <- predict(dataset_ctree, newdata = test_data)
+result<-table(testPred, test_data$will_go_to_college )
 library(caret)
+co_result <- confusionMatrix(result,positive="1")
+print(co_result)
+```
+
+![](images/WhatsApp Image 2023-11-30 at 20.15.36_e95c25e1.jpg)
+
+this matrix below show the evaluation model on testing data
+
+| Evaluation method | Method  |
+|-------------------|---------|
+| Accuracy          | 83.84 % |
+| Error rate        | 16.16%  |
+| Sensitivity       | 86.73%  |
+| Specificity       | 81.00%  |
+| Precision         | 81.73%  |
+
+average grade with the highest information gain is chosen as the root attribute
+
+#### **Gain ratio**
+
+```{r}
+library(RWeka)
+
+
+C45Fit <- J48( will_go_to_college~.,data=train_data)
+table(train_data$will_go_to_college, predict(C45Fit))
+
+plot(C45Fit,type = "simple")
+testPred <- predict(C45Fit, newdata = test_data)
+results <- confusionMatrix(testPred, test_data$will_go_to_college, positive = "1")
+print(results)
+```
+
+![](images/WhatsApp Image 2023-11-30 at 20.17.25_c02a1b81.jpg)
+
+this matrix below show the evaluation model on testing data
+
+| Evaluation method | Method |
+|-------------------|--------|
+| Accuracy          | 80.03% |
+| Error rate        | 19.97% |
+| Sensitivity       | 84.69% |
+| Specificity       | 76.00% |
+| Precision         | 77.57% |
+
+Parent salary is chosen as the root due to its high purity which indicate high Gain ratio
+
+#### **Gini index**
+
+```{r}
 library(rpart)
 library(rpart.plot)
+cart_fit=rpart(will_go_to_college~., data=train_data, method="class",cp=0.008)
 
 
+rpart.plot(cart_fit)
 
-set.seed(1234) # Random seed
-fold <- c(2, 3, 4)  # Values of xval (number of folds) to try
+testPred<- predict(cart_fit,newdata=test_data,type="class")
+results<- confusionMatrix(testPred,test_data$will_go_to_college,positive="1")
+print(results)
 
-for (fold in fold) {
-cat("fold"=fold)
-trctrl <- trainControl(method = "cv", number = fold, savePredictions = TRUE)
-dt_fit <- train(factor(will_go_to_college) ~ ., data = data, method = "rpart1SE", trControl = trctrl)
-
- # Plot decision tree
-  rpart.plot(dt_fit$finalModel)
-  
-# Get predicted values
-predictions <- predict(dt_fit, newdata = data)
-
-# Create confusion matrix
-confusion_matrix <- confusionMatrix(predictions, data$will_go_to_college)
-
-# Print the confusion matrix
-print(confusion_matrix)
-
-#print each flod
-pred <- dt_fit$pred
-pred$equal <- ifelse(pred$pred == pred$obs, 1,0)
-eachfold <- pred %>%                                        
-  group_by(Resample) %>%                         
-  summarise_at(vars(equal),                     
-               list(Accuracy = mean))              
-print(eachfold  )
-
-  }
 ```
 
-averages grade exhibits the smallest Gini index binary split, signifying a substantial reduction in impurity. Hence, it is chosen as the splitting attribute. Conversely, attributes such as 'type_school,' 'school_accreditation,' 'gender,' 'parent_age,' and 'parent_was_in_college' yield minimal impurity reduction, leading to their exclusion from the tree. The dataset's balanced class labels and marginal differences in accuracy across folds result in consistent tree structures, as evidenced by the identical trees in all folds. For further details, refer to the [index]. Overall, the model attains an 86% accuracy, emphasizing its effectiveness.
+this matrix below show the evaluation model on testing data
 
-### ID3
+| Evaluation method | Method |
+|-------------------|--------|
+| Accuracy          | 80.81% |
+| Error rate        | 19.19% |
+| Sensitivity       | 76.53% |
+| Specificity       | 85.00% |
+| Precision         | 83.33% |
+
+house area is chosen as the root due to its high purity which indicate Gini index.
+
+| 50% training, 50% testing |
+|---------------------------|
 
 ```{r}
-library(caret)
-library(partykit)
-library(dplyr)
+set.seed(123)
+ind=sample(2, nrow(data), replace=TRUE, prob=c(0.50 , 0.50))
+train_data=data[ind==1,]
+test_data=data[ind==2,]
+dim(train_data)
+dim(test_data)
 
-fold <- c(4, 3, 2)  # Values of xval (number of folds) to try
-
-for (fold in fold) {
-  cat("fold =", fold, "\n")
-  trctrl <- trainControl(method = "cv", number = fold, savePredictions = TRUE)
-  
-  id_fit <- train(factor(will_go_to_college) ~ ., data = data, method = "ctree", trControl = trctrl)
-   print(id_fit$finalModel)
-  # Get predicted values
-  predictions <- predict(id_fit, newdata = data)
-  
-  # Create confusion matrix
-  confusion_matrix <- confusionMatrix(predictions, data$will_go_to_college)
-  
-  # Print the confusion matrix
-  print(confusion_matrix)
-  
-  # Print accuracy for each fold
-  pred <- id_fit$pred
-  pred$equal <- ifelse(pred$pred == pred$obs, 1, 0)
-  eachfold <- pred %>%
-    group_by(Resample) %>%
-    summarise_at(vars(equal), list(Accuracy = mean))
-  print(eachfold)
-
-  # Plot decision tree
-  plot(id_fit$finalModel, main = paste("Decision Tree (Fold", fold, ")"))
-  
-}
 ```
 
-Additional insights reveal that attributes such as school accreditation, parent was in collage contribute to high impurity. In contrast, Parent salary is chosen as the root due to its high purity. Given the balanced class labels in our dataset and minimal variations in accuracy across folds, the result yields consistent tree structures, with only two distinct trees observed for all folds. For further details, please refer to the [index]. The overall accuracy consistently surpasses 86%, affirming the model's efficacy
+We partition the data the data into (50% training, 50% testing). This result in 493 object in the training set and 507 object in the testing set.
 
-### final analysis
-
-The C4.5 model emerged as the top-performing evaluation model, achieving an impressive accuracy rate of 94% to 97%. It was followed by the ID3 model, which demonstrated slightly lower accuracy ranging from 86% to 89%. Lastly, the cart model exhibited an accuracy rate of 86%.
-
-the C4.5 gave better result than ID3 and Cart because they both are biased to multivalued where C4.5 normalized parent salary and house area which are multivalue attributes
-
-C4.5 and ID3 models, the parent's salary served as the root feature, indicating that the financial circumstances of the student are a crucial factor for contemporary universities.
-
-## index
-
-### all trees of C4.5
+#### **information gain**
 
 ```{r}
+library(party)
+myFormula<- will_go_to_college~ + type_school+school_accreditation+gender+interest+residence+parent_age+parent_salary+house_area+average_grades+parent_was_in_college
+
+dataset_ctree<-ctree(myFormula, data=train_data)
+table(predict(dataset_ctree), train_data$will_go_to_college) 
+
+plot(dataset_ctree,type="simple")
+testPred <- predict(dataset_ctree, newdata = test_data)
+result<-table(testPred, test_data$will_go_to_college )
+
 library(caret)
-library(rpart)
-library(dplyr)
-library(rpart.plot)
+co_result <- confusionMatrix(result, positive = "1")
+print(co_result)
 
-folds <- c(2, 3, 4)  # Values of xval (number of folds) to try
-
-for(folds in folds){ 
-  cat("fold =", fold_val, "\n")
-for (fold_val in 1:folds) {
- 
-  
-  trctrl <- trainControl(method = "cv", number = fold_val, savePredictions = TRUE)
-  c45_fit <- train(factor(will_go_to_college) ~ ., data = data, method = "J48", trControl = trctrl)
-  
-   plot(c45_fit$finalModel, main = paste("Decision Tree - Fold", fold_val))
-}
-  # Get predicted values
-  predictions <- predict(c45_fit, newdata = data)
-  
-  # Create confusion matrix
-  confusion_matrix <- confusionMatrix(predictions, data$will_go_to_college)
-  
-  # Print the confusion matrix
-  print(confusion_matrix)
-  
-  # Print accuracy for each fold
-  pred <- c45_fit$pred
-  pred$equal <- ifelse(pred$pred == pred$obs, 1, 0)
-  eachfold <- pred %>%
-    group_by(Resample) %>%
-    summarise_at(vars(equal),
-                 list(Accuracy = mean))
-  print(eachfold)
-  
-  # Plot decision tree for each fold
- 
-
-}
 ```
 
-### all trees of ID3
+![](images/WhatsApp Image 2023-11-30 at 20.20.03_ba0b3fcb.jpg)
+
+this matrix below show the evaluation model on testing data
+
+| Evaluation method | Method |
+|-------------------|--------|
+| Accuracy          | 84.22% |
+| Error rate        | 15.78% |
+| Sensitivity       | 89.53% |
+| Specificity       | 78.71% |
+| Precision         | 81.34% |
+
+average grade with the highest information gain is chosen as the root attribute.
+
+#### **Gain ratio**
 
 ```{r}
-library(caret)
-library(partykit)
-library(dplyr)
+library(RWeka)
+C45Fit <- J48( will_go_to_college~.,data=train_data)
+table(train_data$will_go_to_college, predict(C45Fit))
+plot(C45Fit,type = "simple")
+testPred <- predict(C45Fit, newdata = test_data)
+results <- confusionMatrix(testPred, test_data$will_go_to_college, positive = "1")
+print(results)
 
-fold <- c(4, 3, 2)  # Values of xval (number of folds) to try
-
-for (fold in fold) {
-   cat("fold =", fold, "\n")
-  for(i in 1:fold){
-  trctrl <- trainControl(method = "cv", number = fold, savePredictions = TRUE)
-  
-  id_fit <- train(factor(will_go_to_college) ~ ., data = data, method = "ctree", trControl = trctrl, subset = trctrl$indexes[[i]])
-  
-    plot(id_fit$finalModel, main = paste("Decision Tree (Fold", fold,"-", i, ")"))
-}
-   
-  # Get predicted values
-  predictions <- predict(id_fit, newdata = data)
-  
-  # Create confusion matrix
-  confusion_matrix <- confusionMatrix(predictions, data$will_go_to_college)
-  
-  # Print the confusion matrix
-  print(confusion_matrix)
-  
-  # Print accuracy for each fold
-  pred <- id_fit$pred
-  pred$equal <- ifelse(pred$pred == pred$obs, 1, 0)
-  eachfold <- pred %>%
-    group_by(Resample) %>%
-    summarise_at(vars(equal), list(Accuracy = mean))
-  print(eachfold)
-
-  # Plot decision tree
-
-
-}
 ```
 
-### all trees of Cart
+![](images/WhatsApp Image 2023-11-30 at 20.20.33_a381b10a.jpg)
+
+this matrix below show the evaluation model on testing data
+
+| Evaluation method | Method |
+|-------------------|--------|
+| Accuracy          | 85.21% |
+| Error rate        | 14.79% |
+| Sensitivity       | 87.60% |
+| Specificity       | 82.73% |
+| Precision         | 84.01% |
+
+Parent salary is chosen as the root due to its high purity which indicate high Gain ratio
+
+#### **Gini index**
 
 ```{r}
-library(caret)
 library(rpart)
 library(rpart.plot)
+cart_fit=rpart(will_go_to_college~., data=train_data, method="class",cp=0.008)
 
-set.seed(123) # Random seed
-fold <- c(2, 3, 4)  # Values of xval (number of folds) to try
+rpart.plot(cart_fit)
 
-for (fold in fold) {
-  cat("fold"=fold)
-  for(i in 1:fold){
-
-trctrl <- trainControl(method = "cv", number = fold, savePredictions = TRUE)
-dt_fit <- train(factor(will_go_to_college) ~ ., data = data, method = "rpart1SE", trControl = trctrl)
-
- # Plot decision tree
-  cat("Decision Tree - Fold", i, ":\n")
-  rpart.plot(dt_fit$finalModel)
-  
-}
-# Get predicted values
-predictions <- predict(dt_fit, newdata = data)
-
-# Create confusion matrix
-confusion_matrix <- confusionMatrix(predictions, data$will_go_to_college)
-
-# Print the confusion matrix
-print(confusion_matrix)
-
-#print each flod
-pred <- dt_fit$pred
-pred$equal <- ifelse(pred$pred == pred$obs, 1,0)
-eachfold <- pred %>%                                        
-  group_by(Resample) %>%                         
-  summarise_at(vars(equal),                     
-               list(Accuracy = mean))              
-print(eachfold  )
-
-  }
-
+testPred<- predict(cart_fit,newdata=test_data,type="class")
+results<- confusionMatrix(testPred,test_data$will_go_to_college,positive="1")
+print(results)
 ```
+
+this matrix below show the evaluation model on testing data
+
+| Evaluation method | Method |
+|-------------------|--------|
+| Accuracy          | 85.21% |
+| Error rate        | 24.79% |
+| Sensitivity       | 88.37% |
+| Specificity       | 81.93% |
+| Precision         | 83.52% |
+
+: Average grades is chosen as the root due to its high purity which indicate Gini index.
+
+## final analysis
+
+#### information gain
+
+Information Gain is a measure used in the ID3 algorithm for attribute selection in decision tree learning. It quantifies the amount of information obtained about the class variable when a given attribute is used to split the data. The Information Gain is calculated by substract the entropy Expected information needed to classify a tuple in D a with Conditional Entropy Information needed after using A to split D into v partitions, to classify D . A higher Information Gain indicates that the attribute is more informative and should be chosen as the splitting criterion.
+
+for our trees,
+
+average grade was chosen as the root attribute for all 3 trees with the highest information gain This attribute Reflects the least randomness or "impurity" in these partitions and guarantees that a simple tree is found.
+
+|             | 50%-50% | 70%-30% | 80%-20% |
+|-------------|---------|---------|---------|
+| Accuracy    | 84.22%  | 82.37 % | 83.84 % |
+| Error rate  | 15.78%  | 17.63%  | 16.16%  |
+| Sensitivity | 89.53%  | 75.89%  | 86.73%  |
+| Specificity | 78.71%  | 88.31%  | 81.00%  |
+| Precision   | 81.34%  | 85.60%  | 81.73%  |
+
+the evaluation method table shows that the best partiton for information gain shows that 50%-50% is the best model based on accuracy(tuples that are correctly classified) with precntages 84.22% and Sensitivity (True positive recognition rate) with 89.53% but the lowest Specificity(True negative recognition rate) with 78.71%. overall it's the best model for information gain has the lowest error rate 15.78%
+
+#### gain ratio
+
+Gain Ratio is an normaliztion for Information Gain and is used in the C4.5 algorithm, which is an extension of ID3. While Information Gain tends to favor attributes with many multivariate It is calculated by dividing the Information Gain by SplitInfo a(D).
+
+for our trees,
+
+Parent salary was chosen as the root attribute for all 3 trees due to its high Gain ratio, the trees split are unbalanced since gain ratio Tends to prefer unbalanced splits in which one partition is much smaller than the others
+
+|             | 50%-50% | 70%-30% | 80%-20% |
+|-------------|---------|---------|---------|
+| Accuracy    | 85.21%  | 80.34%  | 80.03%  |
+| Error rate  | 14.79%  | 19.66%  | 19.97%  |
+| Sensitivity | 87.60%  | 77.30%  | 84.69%  |
+| Specificity | 82.73%  | 83.12%  | 76.00%  |
+| Precision   | 84.01%  | 80.74%  | 77.57%  |
+
+the evaluation method table shows that the best partition for gain ratio shows that 50%-50% is the best model based on accuracy(tuples that are correctly classified) with percntages 85.21% and Sensitivity (True positive recognition rate) with 87.60% and Precision(tuples labeled as positive are actually positive) with percentages 84.01% but the lowest Specificity(True negative recognition rate) with 82.73%. overall it's the best model dor gain ratio with the lowest error rate 14.79%
+
+#### gini index
+
+Gini Index is a criterion used in the CART (Classification and Regression Trees) algorithm for attribute selection. It measures the impurity of a set of tuples, with lower values Gini a(D) indicating higher purity. The Gini Index is calculated by summing the squared probabilities of each class label in the set
+
+for our trees,
+
+gini index had different root (parent salary/house area/averages grades) for each tree
+
+|             | 50%-50% | 70%-30% | 80%-20% |
+|-------------|---------|---------|---------|
+| Accuracy    | 85.21%  | 79.66%  | 80.81%  |
+| Error rate  | 14.79%  | 20.34%  | 19.19%  |
+| Sensitivity | 88.37%  | 78.01%  | 76.53%  |
+| Specificity | 81.93%  | 81.17%  | 85.00%  |
+| Precision   | 83.52%  | 79.14%  | 83.33%  |
+
+the evaluation method table shows that the best partition for gain ratio shows that 50%-50% is the best model based on accuracy(tuples that are correctly classified) with percentages 85.21% and Sensitivity (True positive recognition rate) with 88.37% and Precision(tuples labeled as positive are actually positive) with percentages 83.52% overall it's the best model for gini index with the lowest error rate 14.79%
+
+#### best model
+
+the 50% training, 50% testing was the best partition for all attribute selection measures with accuracies 85.21%. for both gini index and gain ratio
+
+Both attribute selection measures yield the same accuracy and error rate, so we need to check the remaining evaluation metrics that is provided:
+
+|             | gain ratio | gini index |
+|-------------|------------|------------|
+| Accuracy    | 85.21%     | 85.21%     |
+| Error rate  | 14.79%     | 14.79%     |
+| Sensitivity | 87.60%     | 88.37%     |
+| Specificity | 82.73%     | 81.93%     |
+| Precision   | 84.01%     | 83.52%     |
+
+Comparing the sensitivity, specificity, and precision:
+
+\- Sensitivity: Gini Index has a higher sensitivity value (88.37%) compared to Gain Ratio (87.60%). Higher sensitivity indicates a better ability to correctly identify positive instances so **gini index is better regarding Sensitivity.**
+
+\- Specificity: Gini Index has a lower specificity value (81.93%) compared to Gain Ratio (82.73%). Higher specificity indicates a better ability to correctly identify negative instances.
+
+\- Precision: Gain Ratio has a higher precision value (84.01%) compared to Gini Index (83.52%). Higher precision indicates a better ability to correctly classify positive instances.
+
+**so gain ratio is better regarding** **Specificity and Precision .**
+
+Based on these comparisons, it is difficult to determine definitively which attribute selection measure is the best. The choice between Gini Index and Gain Ratio may depend on the specific requirements and priorities of the problem
+
+our final trees are :
+
+![](images/WhatsApp Image 2023-11-30 at 20.20.33_a381b10a-01.jpg)
+
+![](images/000012.png)
+
+for gain ratio the parent's salary served as the root feature, indicating that the financial circumstances of the student are a crucial factor for contemporary universities.
+
+for gini index the average grades served as the root feature, indicating that the grades are a crucial factor for contemporary universities.
 
 ## Clustering **Analysis:**
 
