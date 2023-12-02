@@ -831,7 +831,7 @@ our final trees are :
 
 for gain ratio the parent's salary served as the root feature, indicating that the financial circumstances of the student are a crucial factor for contemporary universities.
 
-for gini index the average grades served as the root feature, indicating that the grades are a crucial factor for contemporary universities.
+for Gini index the average grades served as the root feature, indicating that the grades are a crucial factor for contemporary universities.
 
 ## Clustering **Analysis:**
 
