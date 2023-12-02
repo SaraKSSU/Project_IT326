@@ -54,33 +54,33 @@ Kaggle.com
 
 ------------------------------------------------------------------------
 
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
-| Attribute             | Description                                                | Type      | Possible values                                                           |
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
-| type_school           | The type of school the student attends                     | Binary    | Academic / Vocational                                                     |
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
-| school_accreditation  | The quality if school                                      | Binary    | A / B (A is better than B)                                                |
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
-| gender                | The student's gender                                       | Binary    | Male / Female                                                             |
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
-| interest              | The student's interest in going to college                 | Nominal   | Very interested /Interested / Less Interested / Not Interested /Uncertain |
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
-| residence             | The student's residence                                    | Binary    | Urban / Rural                                                             |
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
-| parent_age            | The age of the student's parents                           | Numeric   | 40 - 65                                                                   |
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
-| parent_salary         | The monthly salary of the student's parents in IDR/Rupiah. | Numeric   | 1000K - 10M                                                               |
-|                       |                                                            |           |                                                                           |
-|                       | [1Rupiah = 0.00024SAR]                                     |           |                                                                           |
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
-| house_area            | The size of the student's house in meter square            | Numeric   | 20 - 120                                                                  |
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
-| average_grades        | The student's average grades in school.                    | Numeric   | 75 - 98                                                                   |
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
-| parent_was_in_college | Whether the student's parents attended college.            | Binary    | True - False                                                              |
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
-| will_go_to_college    | Whether the student plans to go to college.                | Binary    | True - False                                                              |
-+-----------------------+------------------------------------------------------------+-----------+---------------------------------------------------------------------------+
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
+| Attribute             | Description                                                | Type    | Possible values                                                           |
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
+| type_school           | The type of school the student attends                     | Binary  | Academic / Vocational                                                     |
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
+| school_accreditation  | The quality if school                                      | Binary  | A / B (A is better than B)                                                |
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
+| gender                | The student's gender                                       | Binary  | Male / Female                                                             |
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
+| interest              | The student's interest in going to college                 | Nominal | Very interested /Interested / Less Interested / Not Interested /Uncertain |
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
+| residence             | The student's residence                                    | Binary  | Urban / Rural                                                             |
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
+| parent_age            | The age of the student's parents                           | Numeric | 40 - 65                                                                   |
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
+| parent_salary         | The monthly salary of the student's parents in IDR/Rupiah. | Numeric | 1000K - 10M                                                               |
+|                       |                                                            |         |                                                                           |
+|                       | [1Rupiah = 0.00024SAR]                                     |         |                                                                           |
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
+| house_area            | The size of the student's house in meter square            | Numeric | 20 - 120                                                                  |
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
+| average_grades        | The student's average grades in school.                    | Numeric | 75 - 98                                                                   |
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
+| parent_was_in_college | Whether the student's parents attended college.            | Binary  | True - False                                                              |
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
+| will_go_to_college    | Whether the student plans to go to college.                | Binary  | True - False                                                              |
++-----------------------+------------------------------------------------------------+---------+---------------------------------------------------------------------------+
 
 ## Sample of our data
 
@@ -844,19 +844,13 @@ the 50% training, 50% testing was the best partition for all attribute selection
 
 Both attribute selection measures yield the same accuracy and error rate, so we need to check the remaining evaluation metrics that is provided:
 
-+-------------------------------+-----------------+-----------------+
-|                               | gain ratio      | gini index      |
-+===============================+=================+=================+
-| Accuracy                      | 85.21%          | 85.21%          |
-+-------------------------------+-----------------+-----------------+
-| Error rate                    | 14.79%          | 14.79%          |
-+-------------------------------+-----------------+-----------------+
-| Sensitivity                   | 87.60%          | 88.37%          |
-+-------------------------------+-----------------+-----------------+
-| Specificity                   | 82.73%          | 81.93%          |
-+-------------------------------+-----------------+-----------------+
-| Precision                     | 84.01%          | 83.52%          |
-+-------------------------------+-----------------+-----------------+
+|             | gain ratio | gini index |
+|-------------|------------|------------|
+| Accuracy    | 85.21%     | 85.21%     |
+| Error rate  | 14.79%     | 14.79%     |
+| Sensitivity | 87.60%     | 88.37%     |
+| Specificity | 82.73%     | 81.93%     |
+| Precision   | 84.01%     | 83.52%     |
 
 Comparing the sensitivity, specificity, and precision:
 
@@ -889,20 +883,15 @@ numeric_data <- original_data[, sapply(original_data, is.numeric)]
 
 # Remove the class label 'will_go_to_college'
 numeric_data <- numeric_data[, !(names(numeric_data) == 'will_go_to_college')]
-
-
-# Print the dataset "numeric_data" to make sure it's prepared for clustering
-print(numeric_data)
-
-# Scaling the dataset
-# numeric_data <- scale(numeric_data)
-
- 
 ```
 
 Now, the 'numeric_dataset' dataset contains only numeric attributes without the class label, which makes it ready for the clustering process.
 
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
 ## K=2
+
+In our exploration of k-means clustering, we will start by examining the dataset with K=2, representing an initial attempt to partition the data into two distinct clusters. This initial analysis will serve as a foundational step in understanding the inherent structure and patterns
 
 ```{r}
 # k-means clustering set a seed for random number generation to make the results reproducible 
@@ -939,7 +928,7 @@ fviz_silhouette(avg_sil)
 total_withinss <- kmeans.result$tot.withinss
 cat("Total Within-Cluster Sum of Squares:", sum(total_withinss), "\n")
 
-true_labels <- c(1, 1, 2, 1, 2, 2, 3, 3, 4, 4)  # Adjust based on your actual true labels
+true_labels <- c(1, 1, 2, 1, 2, 2, 3, 3, 4, 4)  
 
 cluster_assignments <- kmeans.result$cluster
  
@@ -948,7 +937,6 @@ cluster_assignments <- kmeans.result$cluster
 #### BCubed recall and precision
 
 ```{r}
-
 # Calculate BCubed precision
 precision <- 0
 for (i in unique(true_labels)) {
@@ -971,14 +959,38 @@ cat("BCubed Recall:", recall, "\n")
 
 ```
 
-## K=4
+### **Cluster Analysis for K=2:**
+
+-   **Silhouette Width:** 0.36
+
+    -   Indicates relatively well-separated and distinct clusters.
+
+-   **Within-Cluster Sum of Squares:** 8669.059
+
+    -   Moderate compactness; clusters are not too tight.
+
+-   **BCubed Precision:** 0.0023
+
+    -   Low precision suggests potential misassignments.
+
+-   **BCubed Recall:** 0.1167
+
+    -   Low recall indicates incomplete representation of true clusters.
+
+So, the clusters are moderately compact with a reasonable silhouette width, but low precision and recall suggest potential misclassification issues.
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+## K=5
+
+Moving to K=5, our exploration in k-means clustering advances to a configuration with five clusters. This adjustment allows for a more detailed partitioning of the dataset, potentially revealing finer grained patterns and distinctions among the data points. The analysis at K=5 will offer insights into the nature of these clusters, assessing their characteristics, compactness, and separation, as we strive to optimize the clustering configuration for the specific nuances of our dataset.
 
 ```{r}
 # k-means clustering set a seed for random number generation to make the results reproducible 
 set.seed(8953)
 
 # run kmeans clustering to find 4 clusters
-kmeans.result <- kmeans(numeric_data, 4)
+kmeans.result <- kmeans(numeric_data, 5)
 
 # visualize clustering
 library(factoextra)
@@ -1008,7 +1020,7 @@ fviz_silhouette(avg_sil)
 total_withinss <- kmeans.result$tot.withinss
 cat("Total Within-Cluster Sum of Squares:", sum(total_withinss), "\n")
 
-true_labels <- c(1, 1, 2, 1, 2, 2, 3, 3, 4, 4)  # Adjust based on your actual true labels
+true_labels <- c(1, 1, 2, 1, 2, 2, 3, 3, 4, 4)  
 
 cluster_assignments <- kmeans.result$cluster
  
@@ -1017,7 +1029,6 @@ cluster_assignments <- kmeans.result$cluster
 #### BCubed recall and precision
 
 ```{r}
-
 # Calculate BCubed precision
 precision <- 0
 for (i in unique(true_labels)) {
@@ -1040,14 +1051,38 @@ cat("BCubed Recall:", recall, "\n")
 
 ```
 
-## K=6
+### **Cluster Analysis for K=5:**
+
+-   **Silhouette Width:** 0.29
+
+    -   Indicates less well-separated clusters compared to k=2
+
+-   **Within-Cluster Sum of Squares:** 4303.841
+
+    -   Lower within-cluster sum suggests more compact clusters than k=2
+
+-   **BCubed Precision:** 0.00166
+
+    -   Low precision implies potential misclassifications.
+
+-   **BCubed Recall:** 0.1333
+
+    -   Slightly higher recall compared to k=2, but still low.
+
+**Final Analysis:** Clusters are more compact than k=2 but less well-separated. Precision and recall remain low, indicating potential misclassifications.
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+## K=7
+
+Proceeding to k=7, our investigation in k-means clustering expands further as we explore a configuration with seven clusters. This adjustment aims to capture even more nuanced patterns and variations within the dataset. Analyzing the characteristics of the seven clusters will provide a more granular understanding of the underlying structure, potentially revealing subtleties that might not be as evident with fewer clusters. As we delve into k=7, our objective is to refine our clustering configuration to align more closely with the intricate details present in the dataset.
 
 ```{r}
 # k-means clustering set a seed for random number generation to make the results reproducible 
 set.seed(8953)
 
-# run kmeans clustering to find 6 clusters
-kmeans.result <- kmeans(numeric_data, 6)
+# run kmeans clustering to find 2 clusters
+kmeans.result <- kmeans(numeric_data, 7)
 
 # visualize clustering
 library(factoextra)
@@ -1077,7 +1112,7 @@ fviz_silhouette(avg_sil)
 total_withinss <- kmeans.result$tot.withinss
 cat("Total Within-Cluster Sum of Squares:", sum(total_withinss), "\n")
 
-true_labels <- c(1, 1, 2, 1, 2, 2, 3, 3, 4, 4)  # Adjust based on your actual true labels
+true_labels <- c(1, 1, 2, 1, 2, 2, 3, 3, 4, 4)  
 
 cluster_assignments <- kmeans.result$cluster
  
@@ -1086,7 +1121,6 @@ cluster_assignments <- kmeans.result$cluster
 #### BCubed recall and precision
 
 ```{r}
-
 # Calculate BCubed precision
 precision <- 0
 for (i in unique(true_labels)) {
@@ -1109,9 +1143,31 @@ cat("BCubed Recall:", recall, "\n")
 
 ```
 
-### The optimal number of clusters
+### **Cluster Analysis for** k=7:
 
-To find the optimal number of clusters to use in the k-means algorithm, we'll use the **fviz_nbclust()** function from the **factoextra**package to create a plot of the number of clusters vs. the total within sum of squares
+-   **Silhouette Width:** 0.27
+
+    -   Indicates clusters are less well-separated compared to k=2 and k=5
+
+-   **Within-Cluster Sum of Squares:** 3389.656
+
+    -   Lower within-cluster sum suggests more compact clusters than k=5
+
+-   **BCubed Precision:** 0.00067
+
+    -   Very low precision indicating significant misclassifications.
+
+-   **BCubed Recall:** 0.067
+
+    -   Low recall suggesting incomplete representation of true clusters.
+
+**Final Analysis:** Clusters are less well-separated than k=2 and k=5 and while more compact than k=5, precision and recall remain low, indicating potential misclassifications.
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+### **Elbow Method Insight:**
+
+We implemented the Elbow Method for determining the optimal number of clusters (k) in a k-means clustering algorithm.
 
 ```{r}
 # Function to calculate total within-cluster sum of squares (wss)
@@ -1129,18 +1185,15 @@ plot(k_values, wss_values, type = "b", pch = 19, frame = FALSE,
      xlab = "Number of Clusters (k)", ylab = "Total Within-Cluster Sum of Squares (WSS)",
      main = "Elbow Method")
 
-# Adding a line to indicate the "elbow"
-abline(v = which(diff(wss_values) == max(diff(wss_values))) + 1, col = "red")
-
 
 ```
 
-According to the output the best number of clusters is one,
+The elbow method has indicated that K=5 is a reasonable choice in terms of balancing the trade-off between capturing variance and not overly complicating the model with too many clusters.
 
 ## Findings
 
 |             |        | 50%-50% |        |         | 70%-30% |        |         | 80%-20% |        |
-|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+|-------------|--------|---------|--------|---------|---------|--------|---------|---------|--------|
 |             | ig     | igr     | gini   | ig      | igr     | gini   | ig      | igr     | gini   |
 | Accuracy    | 84.22% | 85.21%  | 85.21% | 82.37 % | 80.34%  | 79.66% | 83.84 % | 80.03%  | 80.81% |
 | Error rate  | 15.78% | 14.79%  | 14.79% | 17.63%  | 19.66%  | 20.34% | 16.16%  | 19.97%  | 19.19% |
