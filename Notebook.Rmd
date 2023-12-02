@@ -28,24 +28,6 @@ if (!require(factoextra, quietly = TRUE)) {
   install.packages("factoextra")
 }
  
-if (!require(caret, quietly = TRUE)) {
-  install.packages("caret")
-}
-
-if (!require(partykit, quietly = TRUE)) {
-  install.packages("partykit")
-}
-
-if (!require(rpart, quietly = TRUE)) {
-  install.packages("rpart")
-}
-if (!require(rpart.plot, quietly = TRUE)) {
-  install.packages("rpart.plot")
-}
-if (!require(tidyverse, quietly = TRUE)) {
-  install.packages("tidyverse")
-}
- 
 ```
 
 # IT326 Project {style="color: gray"}
@@ -461,7 +443,6 @@ We partition the data the data into (70% training, 30% testing). This result in 
 library(party)
 myFormula<- will_go_to_college~ + type_school+school_accreditation+gender+interest+residence+parent_age+parent_salary+house_area+average_grades+parent_was_in_college
 dataset_ctree<-ctree(myFormula, data=train_data)
-
 table(predict(dataset_ctree), train_data$will_go_to_college) 
 plot(dataset_ctree,type="simple")
 testPred <- predict(dataset_ctree, newdata = test_data)
@@ -471,7 +452,7 @@ co_result <- confusionMatrix(result, positive = "1")
 print(co_result)
 ```
 
-![](images/WhatsApp Image 2023-11-30 at 19.36.29_0e85e418.jpg)
+![](images/WhatsApp%20Image%202023-11-30%20at%2019.36.29_0e85e418.jpg)
 
 this matrix below show the evaluation model on testing data
 
@@ -483,7 +464,13 @@ this matrix below show the evaluation model on testing data
 | Specificity       | 88.31% |
 | Precision         | 85.60% |
 
-average grade with the highest information gain is chosen as the root attribute.
+In this decision tree model, the average grade with the highest information gain is selected as the root attribute. This means that the average grade is considered the most informative feature for classifying the data.
+
+To enhance the model's predictive capability, additional splitting criteria are incorporated based on their information gain values. These criteria include type_school, interest, residence, parent_salary, and house_area. By considering these attributes, the model aims to capture more relevant information from the data and improve its classification accuracy.
+
+The model then utilizes the house area and average grades as splitting criteria to separate the data into different branches of the tree in multiples levels
+
+However, it's worth noting that the decision tree in this case is considered to have a low level. This implies that the tree is relatively shallow and may not be able to capture intricate patterns or relationships present in the data. For example gender, parent_was_in_college, parent age, and school accreditation are not included in the tree due to limited availability of the data or their lower information gain values.
 
 #### **Gain ratio**
 
@@ -509,7 +496,9 @@ this matrix below show the evaluation model on testing data
 | Specificity       | 83.12% |
 | Precision         | 80.74% |
 
-Parent salary is chosen as the root due to its high Gain ratio
+In contrast to the previous decision tree, the current tree is more complex and includes all the attributes except for gender. This means that the decision tree takes into account a wider range of factors to make its classifications. The attribute with the highest Gain ratio, which measures the effectiveness of a split, is chosen as the root attribute. In this case, Parent salary is determined to have the highest Gain ratio and is selected as the root attribute.
+
+The model then repeatedly uses average grades as the splitting criterion at different levels of the tree. This indicates that the average grades are considered crucial for classifying the data and further subdividing the branches.
 
 #### **Gini index**
 
@@ -537,7 +526,11 @@ this matrix below show the evaluation model on testing data
 | Specificity       | 81.17% |
 | Precision         | 79.14% |
 
-Parent salary is chosen as the root due to its high Gain index.
+In this particular partition of the decision tree, Parent salary was once again chosen as the root attribute due to its high Gain index.
+
+Gender and residence, on the other hand, were not included in this partition of the tree. Without sufficient data or a significant information gain associated with these attributes, the model may not have enough evidence to utilize them for accurate classification.
+
+It's worth noting that gender was not included in this partition, and it is important to highlight that the accuracy of this specific model was relatively lower, at 79.66%.
 
 | 80% training, 20% testing |
 |---------------------------|
@@ -560,7 +553,7 @@ library(party)
 myFormula<- will_go_to_college~ + type_school+school_accreditation+gender+interest+residence+parent_age+parent_salary+house_area+average_grades+parent_was_in_college
 
 dataset_ctree<-ctree(myFormula, data=train_data)
-table(predict(dataset_ctree), train_data$will_go_to_college) 
+table(predict(dataset_ctree), train_data$will_go_to_college)
 plot(dataset_ctree,type="simple")
 testPred <- predict(dataset_ctree, newdata = test_data)
 result<-table(testPred, test_data$will_go_to_college )
@@ -569,7 +562,7 @@ co_result <- confusionMatrix(result,positive="1")
 print(co_result)
 ```
 
-![](images/WhatsApp Image 2023-11-30 at 20.15.36_e95c25e1.jpg)
+![](images/WhatsApp%20Image%202023-11-30%20at%2020.15.36_e95c25e1.jpg)
 
 this matrix below show the evaluation model on testing data
 
@@ -581,7 +574,9 @@ this matrix below show the evaluation model on testing data
 | Specificity       | 81.00%  |
 | Precision         | 81.73%  |
 
-average grade with the highest information gain is chosen as the root attribute
+In this partition of the decision tree, the average grade with the highest information gain is selected as the root attribute. The selection is based on the fact that the average grade attribute has the lowest conditional entropy, the model aims to create a more effective split and improve the classification accuracy. also to mention that attribute was not included in the tree gender,parent was in collage, parent age
+
+On a positive note, the accuracy in this partition has increased by 1.47% compared to the previous partition. This improvement in accuracy can be attributed to the fact that the training data has been increased by 10%. By having more data for training, the model has a larger and more diverse set of examples to learn from, allowing it to make more accurate predictions.
 
 #### **Gain ratio**
 
@@ -598,7 +593,7 @@ results <- confusionMatrix(testPred, test_data$will_go_to_college, positive = "1
 print(results)
 ```
 
-![](images/WhatsApp Image 2023-11-30 at 20.17.25_c02a1b81.jpg)
+![](images/WhatsApp%20Image%202023-11-30%20at%2020.17.25_c02a1b81.jpg)
 
 this matrix below show the evaluation model on testing data
 
@@ -610,7 +605,7 @@ this matrix below show the evaluation model on testing data
 | Specificity       | 76.00% |
 | Precision         | 77.57% |
 
-Parent salary is chosen as the root due to its high purity which indicate high Gain ratio
+In this particular model that utilizes the gain ratio, it is observed that the decision tree is once again more complex compared to the other models. The attribute chosen as the root attribute is parent salary, based on its high purity and resulting high gain ratio. However, it is important to note that the gender attribute was not included in the decision tree. Ultimately, the gain ratio model's construction involved careful considerations and prioritized the parent's salary as root
 
 #### **Gini index**
 
@@ -638,7 +633,21 @@ this matrix below show the evaluation model on testing data
 | Specificity       | 85.00% |
 | Precision         | 83.33% |
 
-house area is chosen as the root due to its high purity which indicate Gini index.
+for the first time house area was chosen as the root due to its high purity, as indicated by the high Gini index.
+
+The model relies on the parent_salary attribute to split the tree multiple times, indicating its importance in determining the classification. This suggests that the parent's salary has a significant impact on whether a student will go to college or not, and it is repeatedly used as a criterion for further branching in the tree.
+
+It's worth noting that 20% of the dataset follows the rule:
+
+IF house_area \< 0.54 and parent_salary \< 0.42, THEN will go to college = 1.
+
+This rule implies that when the house area is below a certain threshold and the parent's salary is below another threshold, there is a higher likelihood of the student going to college.
+
+Moreover, 28% of the dataset follows the rule:
+
+IF house_area \>= 0.54 and parent_salary \>= 0.37 and type_school = 1, THEN will go to college = 1. This rule suggests that when the house area is above a certain threshold, the parent's salary is above another threshold, and the type of school is 1, there is a higher probability of the student going to college.
+
+Overall, these rules cover a significant portion of the dataset, 48% of it. This indicates that a large amount of data can be classified based on these specific rules, providing valuable insights into the factors that influence a student's likelihood of attending college. we only mentioned those two rules duo to their high percentage of data
 
 | 50% training, 50% testing |
 |---------------------------|
@@ -674,7 +683,7 @@ print(co_result)
 
 ```
 
-![](images/WhatsApp Image 2023-11-30 at 20.20.03_ba0b3fcb.jpg)
+![](images/WhatsApp%20Image%202023-11-30%20at%2020.20.03_ba0b3fcb.jpg)
 
 this matrix below show the evaluation model on testing data
 
@@ -686,7 +695,13 @@ this matrix below show the evaluation model on testing data
 | Specificity       | 78.71% |
 | Precision         | 81.34% |
 
-average grade with the highest information gain is chosen as the root attribute.
+In this decision tree model, the root attribute is determined by selecting the average grade with the highest information gain. This indicates that the average grade is considered the most informative feature for classifying the data, as it provides significant insights into the classification process.
+
+To improve the model's predictive capability, additional splitting criteria are incorporated based on their information gain values. These criteria include type_school, interest, residence, parent_salary, house_area, and whether the parent was in college. By considering these attributes, the model aims to capture more relevant information and enhance its ability to classify the data accurately.
+
+In the tree structure, the model utilizes both the house area and average grades as splitting criteria in multiple levels. This means that the data is divided into different branches of the tree based on these attributes, allowing for more refined classification.
+
+gender, parent age, and school accreditation are not included in the tree due to either limited availability of the data or their lower information gain values, indicating that they may have less impact on the classification process according to the model's evaluation.
 
 #### **Gain ratio**
 
@@ -701,7 +716,7 @@ print(results)
 
 ```
 
-![](images/WhatsApp Image 2023-11-30 at 20.20.33_a381b10a.jpg)
+![](images/WhatsApp%20Image%202023-11-30%20at%2020.20.33_a381b10a.jpg)
 
 this matrix below show the evaluation model on testing data
 
@@ -713,7 +728,9 @@ this matrix below show the evaluation model on testing data
 | Specificity       | 82.73% |
 | Precision         | 84.01% |
 
-Parent salary is chosen as the root due to its high purity which indicate high Gain ratio
+In contrast to the previous decision tree, the current tree is more complex and includes all the attributes except for parent age. Notably, for the first time, gender is included as an attribute in the tree. This indicates that the decision tree now takes into account a wider range of factors, including gender, to make its classifications. By incorporating these additional attributes, the model aims to capture more nuanced patterns and relationships in the data.
+
+The attribute with the highest Gain ratio is chosen as the root attribute. In this particular case, Parent salary is determined to have the highest Gain ratio and is selected as the root attribute. This suggests that Parent salary provides the most significant reduction in uncertainty and is considered crucial for classifying the data accurately.
 
 #### **Gini index**
 
@@ -739,7 +756,19 @@ this matrix below show the evaluation model on testing data
 | Specificity       | 81.93% |
 | Precision         | 83.52% |
 
-: Average grades is chosen as the root due to its high purity which indicate Gini index.
+: The attribute chosen as the root attribute in this decision tree is average grades, primarily due to its high purity, indicating a high Gini index. The Gini index measures the impurity of a node in a decision tree, and a high purity value suggests that the attribute is effective for classification.
+
+27% of the dataset follows the rule:
+
+IF average_grades=+A,+B,A and parent_salary\>=0.37 and house_area\>=0.41 and type_school=1, THEN will_go_to_collage=0.
+
+Furthermore, 17% of the dataset follows the rule:
+
+IF average_grades=B,+C and house_area\<=0.41, THEN will_go_to_collage=1.
+
+These rules highlight the complexity and variability in determining whether a student will go to college. Even if a student has stable financial circumstances and good grades, it does not guarantee their enrollment in college. in contract to the second which mean Other factors could play a role in the decision-making process.
+
+we only mentioned those two rules duo to their high percentage of data
 
 ## final analysis
 
@@ -797,19 +826,37 @@ gini index had different root (parent salary/house area/averages grades) for eac
 
 the evaluation method table shows that the best partition for gain ratio shows that 50%-50% is the best model based on accuracy(tuples that are correctly classified) with percentages 85.21% and Sensitivity (True positive recognition rate) with 88.37% and Precision(tuples labeled as positive are actually positive) with percentages 83.52% overall it's the best model for gini index with the lowest error rate 14.79%
 
+**noticeable notes**
+
+important to note that gender was not included in 7 of 9 trees which
+
+parent's salary was the root of 4 of 9 trees
+
+average grades was the root of 4 of 9 trees
+
+house area was the root only once 1 of 9 tree
+
+In summary, the analysis of the decision trees reveals that financial circumstances, as indicated by parent's salary, and academic performance, as indicated by average grades, are crucial factors for contemporary universities when predicting college enrollment. In this particular dataset, gender is not considered highly important in the decision-making process.
+
 #### best model
 
 the 50% training, 50% testing was the best partition for all attribute selection measures with accuracies 85.21%. for both gini index and gain ratio
 
 Both attribute selection measures yield the same accuracy and error rate, so we need to check the remaining evaluation metrics that is provided:
 
-|             | gain ratio | gini index |
-|-------------|------------|------------|
-| Accuracy    | 85.21%     | 85.21%     |
-| Error rate  | 14.79%     | 14.79%     |
-| Sensitivity | 87.60%     | 88.37%     |
-| Specificity | 82.73%     | 81.93%     |
-| Precision   | 84.01%     | 83.52%     |
++-------------------------------+-----------------+-----------------+
+|                               | gain ratio      | gini index      |
++===============================+=================+=================+
+| Accuracy                      | 85.21%          | 85.21%          |
++-------------------------------+-----------------+-----------------+
+| Error rate                    | 14.79%          | 14.79%          |
++-------------------------------+-----------------+-----------------+
+| Sensitivity                   | 87.60%          | 88.37%          |
++-------------------------------+-----------------+-----------------+
+| Specificity                   | 82.73%          | 81.93%          |
++-------------------------------+-----------------+-----------------+
+| Precision                     | 84.01%          | 83.52%          |
++-------------------------------+-----------------+-----------------+
 
 Comparing the sensitivity, specificity, and precision:
 
@@ -821,17 +868,11 @@ Comparing the sensitivity, specificity, and precision:
 
 **so gain ratio is better regarding** **Specificity and Precision .**
 
-Based on these comparisons, it is difficult to determine definitively which attribute selection measure is the best. The choice between Gini Index and Gain Ratio may depend on the specific requirements and priorities of the problem
+Based on these comparisons, it is difficult to determine definitively which attribute selection measure is the best. The choice between Gini Index and Gain Ratio may depend on the specific requirements and priorities of the problem but since we focus on the true positive more than true negative because our goal of classification to determine who will go to collage, so we will choose the model based on the sensitivity (Gini index)
 
-our final trees are :
-
-![](images/WhatsApp Image 2023-11-30 at 20.20.33_a381b10a-01.jpg)
+our final tree is:
 
 ![](images/000012.png)
-
-for gain ratio the parent's salary served as the root feature, indicating that the financial circumstances of the student are a crucial factor for contemporary universities.
-
-for Gini index the average grades served as the root feature, indicating that the grades are a crucial factor for contemporary universities.
 
 ## Clustering **Analysis:**
 
@@ -1095,3 +1136,32 @@ abline(v = which(diff(wss_values) == max(diff(wss_values))) + 1, col = "red")
 ```
 
 According to the output the best number of clusters is one,
+
+## Findings
+
+|             |        | 50%-50% |        |         | 70%-30% |        |         | 80%-20% |        |
+|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+|             | ig     | igr     | gini   | ig      | igr     | gini   | ig      | igr     | gini   |
+| Accuracy    | 84.22% | 85.21%  | 85.21% | 82.37 % | 80.34%  | 79.66% | 83.84 % | 80.03%  | 80.81% |
+| Error rate  | 15.78% | 14.79%  | 14.79% | 17.63%  | 19.66%  | 20.34% | 16.16%  | 19.97%  | 19.19% |
+| Sensitivity | 89.53% | 87.60%  | 88.37% | 75.89%  | 77.30%  | 78.01% | 86.73%  | 84.69%  | 76.53% |
+| Specificity | 78.71% | 82.73%  | 81.93% | 88.31%  | 83.12%  | 81.17% | 81.00%  | 76.00%  | 85.00% |
+| Precision   | 81.34% | 84.01%  | 83.52% | 85.60%  | 80.74%  | 79.14% | 81.73%  | 77.57%  | 83.33% |
+
+Accuracy (recognition rate): Percentage of test set tuples that are correctly classified
+
+Error rate (misclassification rate): 1 -- accuracy
+
+Sensitivity (recall): True positive recognition rate
+
+Specificity: True negative recognition rate
+
+Precision (exactness): What % of tuples labeled as positive are actually positive.
+
+For partition 50%-50% : gain ratio and gini index equals in accuracy 85.21% but as we mention before in [best model] we choose based on Sensitivity, gini index is the best model with 88.37% sensitivity.
+
+For partition 70%-30%: information gain is the best model for this partition with accuracy 82.37 %
+
+For partition 80%-20%: information gain is the best model for this partition with accuracy 83.84 %
+
+overall 50%-50% wasa the best partition with algorithm gini index with accuracy 85.21%.
