@@ -1240,3 +1240,78 @@ For partition 70%-30%: information gain is the best model for this partition wit
 For partition 80%-20%: information gain is the best model for this partition with accuracy 83.84 %
 
 overall 50%-50% wasa the best partition with algorithm gini index with accuracy 85.21%.
+
+## Findings
+
+### Classification:
+
+|             |        | 50%-50% |        |         | 70%-30% |        |         | 80%-20% |        |
+|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+|             | ig     | igr     | gini   | ig      | igr     | gini   | ig      | igr     | gini   |
+| Accuracy    | 84.22% | 85.21%  | 85.21% | 82.37 % | 80.34%  | 79.66% | 83.84 % | 80.03%  | 80.81% |
+| Error rate  | 15.78% | 14.79%  | 14.79% | 17.63%  | 19.66%  | 20.34% | 16.16%  | 19.97%  | 19.19% |
+| Sensitivity | 89.53% | 87.60%  | 88.37% | 75.89%  | 77.30%  | 78.01% | 86.73%  | 84.69%  | 76.53% |
+| Specificity | 78.71% | 82.73%  | 81.93% | 88.31%  | 83.12%  | 81.17% | 81.00%  | 76.00%  | 85.00% |
+| Precision   | 81.34% | 84.01%  | 83.52% | 85.60%  | 80.74%  | 79.14% | 81.73%  | 77.57%  | 83.33% |
+
+Accuracy (recognition rate): Percentage of test set tuples that are correctly classified
+
+Error rate (misclassification rate): 1 -- accuracy
+
+Sensitivity (recall): True positive recognition rate
+
+Specificity: True negative recognition rate
+
+Precision (exactness): What % of tuples labeled as positive are actually positive.
+
+For partition 50%-50% : gain ratio and gini index equals in accuracy 85.21% but as we mention before in [best model] we choose based on Sensitivity, gini index is the best model with 88.37% sensitivity.
+
+For partition 70%-30%: information gain is the best model for this partition with accuracy 82.37 %
+
+For partition 80%-20%: information gain is the best model for this partition with accuracy 83.84 %
+
+overall 50%-50% wasa the best partition with algorithm gini index with accuracy 85.21%.
+
+### Clustering
+
++-------------------------------------+-------------+-------------+------------+
+| Metric                              | K=2         | K=5         | K=7        |
++=====================================+=============+=============+============+
+| Average Silhouette Width            | 0.36        | 0.29        | 0.27       |
++-------------------------------------+-------------+-------------+------------+
+| Total Within-Cluster Sum of Squares | 8669.059    | 4303.841    | 3389.656   |
++-------------------------------------+-------------+-------------+------------+
+| BCubed Precision                    | 0.002333333 | 0.001666667 | 0.00067    |
++-------------------------------------+-------------+-------------+------------+
+| BCubed Recall                       | 0.1166667   | 0.1333333   | 0.067      |
++-------------------------------------+-------------+-------------+------------+
+
+In our overall analysis, we evaluated the performance of the k-means clustering algorithm for three different values of k (2, 5, and 7). The key metrics provide insights into the characteristics of the resulting clusters:
+
+1.  *Average Silhouette Width:*
+
+    -   The average silhouette width measures the separation and cohesion of clusters. As k increases from 2 to 7, there is a gradual decline in silhouette width, indicating that clusters become less distinct. However, k=5 still maintains a reasonable silhouette width, suggesting a balance between separation and cohesion.
+
+2.  *Total Within-Cluster Sum of Squares:*
+
+    -   The total within-cluster sum of squares reflects the compactness of clusters. Notably, k=7 exhibits the lowest sum of squares, implying more compact clusters compared to k=5 and k=2. This aligns with the expectation that a higher k tends to yield more compact clusters.
+
+3.  *BCubed Precision and Recall:*
+
+    -   BCubed precision and recall metrics assess the accuracy and completeness of clustering. Precision and recall values are relatively low across all k values, indicating potential misclassifications. However, k=5 stands out with slightly higher precision and recall compared to k=2 and k=7, suggesting a better balance between accuracy and completeness.
+
+Considering the results obtained from the elbow method, which identifies k=5 as the optimal number of clusters, our analysis aligns with this recommendation. The detailed examination of silhouette width, within-cluster sum of squares, and BCubed metrics reinforces the choice of k=5 as a suitable configuration, striking a balance between cluster distinctiveness and internal cohesion. This comprehensive evaluation supports the decision to proceed with k=5 for a more refined and effective clustering solution.
+
+In the following figures, the visualisation of the clusters for each trial:
+
+K=2:
+
+![](images/WhatsApp Image 2023-12-02 at 21.37.33_d6e6b58a.jpg)
+
+k=5
+
+![](images/WhatsApp Image 2023-12-02 at 21.39.14_75db9341.jpg)
+
+K=7
+
+![](images/WhatsApp Image 2023-12-02 at 21.39.40_d563d64c.jpg)
