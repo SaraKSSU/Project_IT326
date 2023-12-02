@@ -55,9 +55,13 @@ if (!require(RWeka, quietly = TRUE)) {
 
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
-## The Goal
+## The Goal and problem
 
-Our primary objective of this analysis is to classify whatever a student will go to college or not using the classification methods and to identify the main factors and reasons why students are less likely to pursue higher education indicated by "will_go_to_college" being 'False'. By leveraging the provided dataset with attributes such as school type, school accreditation, gender, interest in college, residence, we aim to discover the most influential variables and their relationships with the decision not to attend college.
+Our primary objective of this analysis is to classify whatever a student will go to college or not we aim to discover the most influential variables and their relationships with the decision not to attend college to provide counseling session to the student to help them
+
+## Data mining Task
+
+using the classification methods and to identify the main factors and reasons why students are less likely to pursue higher education using class label indicated "will_go_to_college" being 'False'. By leveraging the provided dataset with attributes such as school type, school accreditation, gender, interest in college, residence and use clustering to group pattern of the student who will go to collage or not
 
 ## The Source
 
@@ -231,6 +235,10 @@ cat("coefficient of variation:",SD/MeanAge*100,"%")
 ```
 
 This summary provides the range for age attribute [40,65] which indicates that all parent in middle age during this age parent have more concern about their children , the coefficient of variation= 6.7% which indicates lower variation ,and the value of attribute parent_agerare are relatively close to the mean overall 25% of them have an age below or equal to 50 , 75% have an age below or equal to 54 and the median value is 52
+
+## Preprocessing data
+
+we aim to increase the quality of data and transforming the data to make it suitable for analysis
 
 ## Outliers analysis
 
@@ -884,11 +892,11 @@ Comparing the sensitivity, specificity, and precision:
 
 **so gain ratio is better regarding** **Specificity and Precision .**
 
-Based on these comparisons, it is difficult to determine definitively which attribute selection measure is the best. The choice between Gini Index and Gain Ratio may depend on the specific requirements and priorities of the problem but since we focus on the true positive more than true negative because our goal of classification to determine who will go to collage, so we will choose the model based on the sensitivity (Gini index)
+Based on these comparisons, it is difficult to determine definitively which attribute selection measure is the best. The choice between Gini Index and Gain Ratio may depend on the specific requirements and priorities of the problem but since we focus on the true negative more than true positive because our goal of classification to determine who will not go to collage, so we will choose the model based on the Specificity and Precision (Gain ratio)
 
 our final tree is:
 
-![](images/000012.png)
+![](images/WhatsApp Image 2023-11-30 at 20.20.33_a381b10a-02.jpg)
 
 ## Clustering **Analysis:**
 
@@ -926,8 +934,6 @@ kmeans.result <- kmeans(numeric_data, 2)
 library(factoextra)
 fviz_cluster(kmeans.result, data = numeric_data)
 
-# print the clustering result
-print(kmeans.result)
 
 
 ```
@@ -1018,8 +1024,6 @@ kmeans.result <- kmeans(numeric_data, 5)
 library(factoextra)
 fviz_cluster(kmeans.result, data = numeric_data)
 
-# print the clustering result
-print(kmeans.result)
 
 
 ```
@@ -1110,8 +1114,7 @@ kmeans.result <- kmeans(numeric_data, 7)
 library(factoextra)
 fviz_cluster(kmeans.result, data = numeric_data)
 
-# print the clustering result
-print(kmeans.result)
+
 
 
 ```
@@ -1214,39 +1217,10 @@ The elbow method has indicated that K=5 is a reasonable choice in terms of balan
 
 ## Findings
 
-|             |        | 50%-50% |        |         | 70%-30% |        |         | 80%-20% |        |
-|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
-|             | ig     | igr     | gini   | ig      | igr     | gini   | ig      | igr     | gini   |
-| Accuracy    | 84.22% | 85.21%  | 85.21% | 82.37 % | 80.34%  | 79.66% | 83.84 % | 80.03%  | 80.81% |
-| Error rate  | 15.78% | 14.79%  | 14.79% | 17.63%  | 19.66%  | 20.34% | 16.16%  | 19.97%  | 19.19% |
-| Sensitivity | 89.53% | 87.60%  | 88.37% | 75.89%  | 77.30%  | 78.01% | 86.73%  | 84.69%  | 76.53% |
-| Specificity | 78.71% | 82.73%  | 81.93% | 88.31%  | 83.12%  | 81.17% | 81.00%  | 76.00%  | 85.00% |
-| Precision   | 81.34% | 84.01%  | 83.52% | 85.60%  | 80.74%  | 79.14% | 81.73%  | 77.57%  | 83.33% |
-
-Accuracy (recognition rate): Percentage of test set tuples that are correctly classified
-
-Error rate (misclassification rate): 1 -- accuracy
-
-Sensitivity (recall): True positive recognition rate
-
-Specificity: True negative recognition rate
-
-Precision (exactness): What % of tuples labeled as positive are actually positive.
-
-For partition 50%-50% : gain ratio and gini index equals in accuracy 85.21% but as we mention before in [best model] we choose based on Sensitivity, gini index is the best model with 88.37% sensitivity.
-
-For partition 70%-30%: information gain is the best model for this partition with accuracy 82.37 %
-
-For partition 80%-20%: information gain is the best model for this partition with accuracy 83.84 %
-
-overall 50%-50% wasa the best partition with algorithm gini index with accuracy 85.21%.
-
-## Findings
-
 ### Classification:
 
 |             |        | 50%-50% |        |         | 70%-30% |        |         | 80%-20% |        |
-|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+|--------|--------|-------|--------|--------|--------|--------|--------|--------|--------|
 |             | ig     | igr     | gini   | ig      | igr     | gini   | ig      | igr     | gini   |
 | Accuracy    | 84.22% | 85.21%  | 85.21% | 82.37 % | 80.34%  | 79.66% | 83.84 % | 80.03%  | 80.81% |
 | Error rate  | 15.78% | 14.79%  | 14.79% | 17.63%  | 19.66%  | 20.34% | 16.16%  | 19.97%  | 19.19% |
@@ -1264,7 +1238,7 @@ Specificity: True negative recognition rate
 
 Precision (exactness): What % of tuples labeled as positive are actually positive.
 
-For partition 50%-50% : gain ratio and gini index equals in accuracy 85.21% but as we mention before in [best model] we choose based on Sensitivity, gini index is the best model with 88.37% sensitivity.
+For partition 50%-50% : gain ratio and gini index equals in accuracy 85.21% but as we mention before in [best model] we choose based on Precision 84.01% and Specificity 82.73% , Gain rato is the best model.
 
 For partition 70%-30%: information gain is the best model for this partition with accuracy 82.37 %
 
@@ -1315,3 +1289,9 @@ k=5
 K=7
 
 ![](images/WhatsApp Image 2023-12-02 at 21.39.40_d563d64c.jpg)
+
+### 
+
+### Classification vs Clustering
+
+classification offers a more interpretable and actionable solution compared to clustering, as it assigns clear labels to data points. In addition, the availability of class labels enhances the model's ability to generalize and make informed predictions. While clustering struggle with overlapping clusters and lack of clear evaluation metrics, classification leverages the labeled data to optimize performance and provide meaningful insights. Therefore, for our dataset, the utilization of classification is not only justified by its high accuracy but also by its ability to address the specific characteristics and challenges presented in the data.
